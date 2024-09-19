@@ -8,6 +8,22 @@ public class Task {
     private final UUID uuid;
     private final TaskStatus taskStatus;
 
+    @Override
+    public String toString() {
+        return "Task{"
+                + "name='"
+                + name
+                + '\''
+                + ", description='"
+                + description
+                + '\''
+                + ", uuid="
+                + uuid
+                + ", taskStatus="
+                + taskStatus
+                + '}';
+    }
+
     Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
         this.name = name;
         this.description = description;

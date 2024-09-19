@@ -1,15 +1,32 @@
 import java.util.UUID;
 
 public class SubTask extends Task {
-    private final EpicTask epicTask;
+    private final UUID epicTaskUUID;
 
-    SubTask(String name, String description, UUID uuid, TaskStatus taskStatus, EpicTask epicTask) {
+    SubTask(String name, String description, UUID uuid, TaskStatus taskStatus, UUID epicTaskUUID) {
         super(name, description, uuid, taskStatus);
-        this.epicTask = epicTask;
-        this.epicTask.addSubtaskToStorage(this);
+        this.epicTaskUUID = epicTaskUUID;
     }
 
-    public EpicTask getEpicTask() {
-        return epicTask;
+    public UUID getEpicTaskUUID() {
+        return epicTaskUUID;
+    }
+
+    @Override
+    public String toString() {
+        return "SubTask{"
+                + "name='"
+                + getName()
+                + '\''
+                + ", description='"
+                + getDescription()
+                + '\''
+                + ", uuid="
+                + getUUID()
+                + ", taskStatus="
+                + getTaskStatus()
+                + ", epicTaskUUID="
+                + epicTaskUUID
+                + '}';
     }
 }
