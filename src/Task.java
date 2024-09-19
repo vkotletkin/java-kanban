@@ -3,10 +3,10 @@ import java.util.UUID;
 
 public class Task {
 
-    private String name;
-    private String description;
-    private UUID uuid;
-    private TaskStatus taskStatus;
+    private final String name;
+    private final String description;
+    private final UUID uuid;
+    private final TaskStatus taskStatus;
 
     Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
         this.name = name;
@@ -35,32 +35,15 @@ public class Task {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public UUID getUUID() {
         return uuid;
     }
 
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public TaskStatus getTaskStatus() {
         return taskStatus;
     }
-
-    // TODO vrode kak obnovlyaetsya polnosty, ya tak ponimay eto change in hashmap
-//    public void setTaskStatus(TaskStatus taskStatus) {
-//        this.taskStatus = taskStatus;
-//    }
 }
