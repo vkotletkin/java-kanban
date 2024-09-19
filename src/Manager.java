@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Manager {
@@ -14,15 +15,15 @@ public class Manager {
     }
 
     public ArrayList<Task> getTasks() {
-        return new ArrayList<Task>(tasks.values());
+        return new ArrayList<>(tasks.values());
     }
 
     public ArrayList<SubTask> getSubTasks() {
-        return new ArrayList<SubTask>(subtasks.values());
+        return new ArrayList<>(subtasks.values());
     }
 
     public ArrayList<EpicTask> getEpicTasks() {
-        return new ArrayList<EpicTask>(epicTasks.values());
+        return new ArrayList<>(epicTasks.values());
     }
 
     public void delAllTasks() {
@@ -65,14 +66,7 @@ public class Manager {
 
     public void createNewSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
-        EpicTask changedEpicTask = epicTasks.get(subtask.getEpicTaskUUID());
-        epicTasks.put(
-                subtask.getEpicTaskUUID(),
-                new EpicTask(
-                        changedEpicTask.getName(),
-                        changedEpicTask.getDescription(),
-                        changedEpicTask.getUUID(),
-                        calculateEpicTaskStatus(changedEpicTask.getUUID())));
+        updateEpicTaskStatusByUUID(subtask.getEpicTaskUUID());
     }
 
     public void createNewEpicTask(EpicTask epicTask) {
@@ -85,9 +79,13 @@ public class Manager {
 
     public void updateSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
-        EpicTask changedEpicTask = epicTasks.get(subtask.getEpicTaskUUID());
+        updateEpicTaskStatusByUUID(subtask.getEpicTaskUUID());
+    }
+
+    private void updateEpicTaskStatusByUUID(UUID uuid) {
+        EpicTask changedEpicTask = epicTasks.get(uuid);
         epicTasks.put(
-                subtask.getEpicTaskUUID(),
+                uuid,
                 new EpicTask(
                         changedEpicTask.getName(),
                         changedEpicTask.getDescription(),
@@ -109,7 +107,15 @@ public class Manager {
 
     public void delEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
-        // del all subtask with this uuid in epic or update
+        ArrayList<UUID> uuidsToDelete = new ArrayList<>();
+        for (Map.Entry<UUID, SubTask> subTask : subtasks.entrySet()) {
+            if (subTask.getValue().getEpicTaskUUID().equals(uuid)) {
+                uuidsToDelete.add(subTask.getValue().getUUID());
+            }
+        }
+        for (UUID uuidToDelete : uuidsToDelete) {
+            subtasks.remove(uuidToDelete);
+        }
     }
 
     public ArrayList<SubTask> getEpicSubTasks(UUID epicUUID) {

@@ -4,54 +4,48 @@ public class Main {
 
     public static void main(String[] args) {
 
-        /* Никита, я оставил тут инстансы task1, task и т.д, чтобы была возможность передать UUID в дальнейшем,
-        ибо, если я передам через new в методы Manager, отдебажить другие функции я не смогу */
+        // Тестирование по ТЗ
 
         Manager manager = new Manager();
 
-        Task task1 =
+        // Классы созданы именно так, а не переданы сразу в manager, так как нужно сохранить UUID
+        // для дальнейших действий
+
+        Task taskFirst =
                 new Task(
                         "Рефакторинг кода",
                         "Почистить код от всякого мусора",
                         UUID.randomUUID(),
-                        TaskStatus.IN_PROGRESS);
+                        TaskStatus.NEW);
 
-        Task task2 =
+        Task taskSecond =
                 new Task(
                         "Убрать комнату",
                         "Убраться перед приездом родителей",
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
-        manager.createNewTask(task1);
-        manager.createNewTask(task2);
-
-        EpicTask epicTask1 =
+        EpicTask epicTaskFirst =
                 new EpicTask(
                         "Pinguin Project",
                         "Написать бэк для сервиса полнотекстового поиска",
                         UUID.randomUUID());
 
-        manager.createNewEpicTask(epicTask1);
-
-        SubTask subtask1 =
+        SubTask subTaskFirst =
                 new SubTask(
                         "Разработать API-обработки запросов",
                         "Пишем несколько методов для обработки JSON",
                         UUID.randomUUID(),
                         TaskStatus.NEW,
-                        epicTask1.getUUID());
+                        epicTaskFirst.getUUID());
 
-        SubTask subtask2 =
+        SubTask subTaskSecond =
                 new SubTask(
                         "Протестировать сервис",
                         "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
                         UUID.randomUUID(),
-                        TaskStatus.IN_PROGRESS,
-                        epicTask1.getUUID());
-
-        manager.createNewSubTask(subtask1, epicTask1.getUUID());
-        manager.createNewSubTask(subtask2, epicTask1.getUUID());
+                        TaskStatus.NEW,
+                        epicTaskFirst.getUUID());
 
         EpicTask epicTaskELK =
                 new EpicTask(
@@ -59,9 +53,7 @@ public class Main {
                         "Изучаем ELK-стек",
                         UUID.randomUUID());
 
-        manager.createNewEpicTask(epicTaskELK);
-
-        SubTask subtaskELK =
+        SubTask subTaskELK =
                 new SubTask(
                         "Читаем ХАБР",
                         "Почитать статьи про ELK",
@@ -69,33 +61,101 @@ public class Main {
                         TaskStatus.NEW,
                         epicTaskELK.getUUID());
 
-        manager.createNewSubTask(subtaskELK, epicTaskELK.getUUID());
+        // Создайте две задачи, а также эпик с двумя подзадачами и эпик с одной подзадачей.
 
-       // System.out.println(manager.getTasks());
+        manager.createNewTask(taskFirst);
+        manager.createNewTask(taskSecond);
+
+        manager.createNewEpicTask(epicTaskFirst);
+
+        manager.createNewSubTask(subTaskFirst);
+        manager.createNewSubTask(subTaskSecond);
+
+        manager.createNewEpicTask(epicTaskELK);
+
+        manager.createNewSubTask(subTaskELK);
+
+        // Распечатайте списки эпиков, задач и подзадач через System.out.println()
+        System.out.println(manager.getTasks());
         System.out.println(manager.getEpicTasks());
-        System.out.println(manager.getSubtasks());
+        System.out.println(manager.getSubTasks());
+
+        // Измените статусы созданных объектов, распечатайте их. Проверьте, что статус задачи и
+        // подзадачи сохранился, а статус эпика рассчитался по статусам подзадач.
+
+        taskFirst =
+                new Task(
+                        "Рефакторинг кода",
+                        "Почистить код от всякого мусора",
+                        taskFirst.getUUID(),
+                        TaskStatus.DONE);
+
+        taskSecond =
+                new Task(
+                        "Убрать комнату",
+                        "Убраться перед приездом родителей",
+                        taskSecond.getUUID(),
+                        TaskStatus.IN_PROGRESS);
+
+        subTaskFirst =
+                new SubTask(
+                        "Разработать API-обработки запросов",
+                        "Пишем несколько методов для обработки JSON",
+                        subTaskFirst.getUUID(),
+                        TaskStatus.DONE,
+                        epicTaskFirst.getUUID());
+
+        subTaskSecond =
+                new SubTask(
+                        "Протестировать сервис",
+                        "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
+                        subTaskSecond.getUUID(),
+                        TaskStatus.IN_PROGRESS,
+                        epicTaskFirst.getUUID());
+
+        subTaskELK =
+                new SubTask(
+                        "Читаем ХАБР",
+                        "Почитать статьи про ELK",
+                        subTaskELK.getUUID(),
+                        TaskStatus.DONE,
+                        epicTaskELK.getUUID());
+
+        manager.updateTask(taskFirst);
+        manager.updateTask(taskSecond);
+        manager.updateSubTask(subTaskFirst);
+        manager.updateSubTask(subTaskSecond);
+        manager.updateSubTask(subTaskELK);
+
+        System.out.println(
+                """
+
+
+                После изменения статусов объектов:
+
+
+                """);
+
+        System.out.println(manager.getTasks());
         System.out.println(manager.getEpicTasks());
+        System.out.println(manager.getSubTasks());
 
-        //        task1 =
-        //                new Task(
-        //                        "Рефакторинг кода",
-        //                        "Почистить код от всякого мусора",
-        //                        task1.getUUID(),
-        //                        TaskStatus.DONE);
-        //
-        //        task2 =
-        //                new Task(
-        //                        "Убрать комнату",
-        //                        "Убраться перед приездом родителей",
-        //                        task2.getUUID(),
-        //                        TaskStatus.IN_PROGRESS);
-        //
-        //        manager.createNewTask(task1);
-        //        manager.createNewTask(task2);
-        //        System.out.println(manager.getTasks());
-        //
-        //        manager.delTaskByUUID(task1.getUUID());
-        //        System.out.println(manager.getTasks());
+        // И, наконец, попробуйте удалить одну из задач и один из эпиков.
 
+        manager.delTaskByUUID(taskFirst.getUUID());
+        manager.delEpicTaskByUUID(epicTaskFirst.getUUID());
+
+        System.out.println(
+                """
+
+
+                После удаления одной из задач и эпика:
+
+
+                """);
+
+        System.out.println(manager.getTasks());
+        System.out.println(manager.getEpicTasks());
+        System.out.println(manager.getSubTasks());
     }
 }
