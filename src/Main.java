@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Тестирование по ТЗ
+        // Тестирование по Т
 
         Manager manager = new Manager();
 
@@ -132,7 +132,6 @@ public class Main {
 
 
                 После изменения статусов объектов:
-
 
                 """);
 

@@ -25,30 +25,4 @@ public class EpicTask extends Task {
                 + getTaskStatus()
                 + '}';
     }
-
-    //    private void setTaskStatus(TaskStatus taskStatus) {
-    //        this.taskStatus = taskStatus;
-    //    }
-    //
-    //        private TaskStatus calculateEpicTaskStatus() {
-    //            int newSubTaskCounter = 0;
-    //            int inProgressTaskCounter = 0;
-    //            int doneTaskCounter = 0;
-    //
-    //            for (SubTask subtask : subtaskStorage.values()) {
-    //                switch (subtask.getTaskStatus()) {
-    //                    case NEW -> newSubTaskCounter++;
-    //                    case IN_PROGRESS -> inProgressTaskCounter++;
-    //                    case DONE -> doneTaskCounter++;
-    //                }
-    //            }
-    //
-    //            if (doneTaskCounter == 0 && inProgressTaskCounter == 0) {
-    //                return TaskStatus.NEW;
-    //            } else if (newSubTaskCounter == 0 && inProgressTaskCounter == 0) {
-    //                return TaskStatus.DONE;
-    //            } else {
-    //                return TaskStatus.IN_PROGRESS;
-    //            }
-    //        }
 }

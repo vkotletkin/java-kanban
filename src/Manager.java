@@ -102,7 +102,9 @@ public class Manager {
     }
 
     public void delSubTaskByUUID(UUID uuid) {
+        UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
         subtasks.remove(uuid);
+        updateEpicTaskStatusByUUID(epicTaskUUID);
     }
 
     public void delEpicTaskByUUID(UUID uuid) {
