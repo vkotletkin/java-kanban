@@ -1,3 +1,7 @@
+package com.yandex.practicum.tasks;
+
+import com.yandex.practicum.tasks.statuses.TaskStatus;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,7 +28,7 @@ public class Task {
                 + '}';
     }
 
-    Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
+    public Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
         this.name = name;
         this.description = description;
         this.uuid = uuid;

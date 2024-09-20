@@ -1,12 +1,16 @@
+package com.yandex.practicum.tasks;
+
+import com.yandex.practicum.tasks.statuses.TaskStatus;
+
 import java.util.UUID;
 
 public class EpicTask extends Task {
 
-    EpicTask(String name, String description, UUID uuid) {
+    public EpicTask(String name, String description, UUID uuid) {
         super(name, description, uuid, TaskStatus.NEW);
     }
 
-    EpicTask(String name, String description, UUID uuid, TaskStatus taskStatus) {
+    public EpicTask(String name, String description, UUID uuid, TaskStatus taskStatus) {
         super(name, description, uuid, taskStatus);
     }
 

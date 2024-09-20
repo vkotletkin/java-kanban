@@ -1,3 +1,9 @@
+import com.yandex.practicum.services.Manager;
+import com.yandex.practicum.tasks.EpicTask;
+import com.yandex.practicum.tasks.SubTask;
+import com.yandex.practicum.tasks.Task;
+import com.yandex.practicum.tasks.statuses.TaskStatus;
+
 import java.util.UUID;
 
 public class Main {

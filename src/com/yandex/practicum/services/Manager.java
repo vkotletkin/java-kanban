@@ -1,3 +1,10 @@
+package com.yandex.practicum.services;
+
+import com.yandex.practicum.tasks.EpicTask;
+import com.yandex.practicum.tasks.SubTask;
+import com.yandex.practicum.tasks.Task;
+import com.yandex.practicum.tasks.statuses.TaskStatus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +15,7 @@ public class Manager {
     private final HashMap<UUID, SubTask> subtasks;
     private final HashMap<UUID, EpicTask> epicTasks;
 
-    Manager() {
+    public Manager() {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epicTasks = new HashMap<>();
