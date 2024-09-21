@@ -21,6 +21,19 @@ public class Manager {
         epicTasks = new HashMap<>();
     }
 
+    public Task createTask(String name, String description, UUID uuid, TaskStatus taskStatus) {
+        return new Task(name, description, uuid, taskStatus);
+    }
+
+    public SubTask createSubTask(
+            String name, String description, UUID uuid, TaskStatus taskStatus, UUID epicTaskUUID) {
+        return new SubTask(name, description, uuid, taskStatus, epicTaskUUID);
+    }
+
+    public EpicTask createEpicTask(String name, String description, UUID uuid) {
+        return new EpicTask(name, description, uuid);
+    }
+
     public ArrayList<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }

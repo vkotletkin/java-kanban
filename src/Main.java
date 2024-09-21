@@ -18,27 +18,27 @@ public class Main {
         // для дальнейших действий
 
         Task taskFirst =
-                new Task(
+                manager.createTask(
                         "Рефакторинг кода",
                         "Почистить код от всякого мусора",
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
-                new Task(
+                manager.createTask(
                         "Убрать комнату",
                         "Убраться перед приездом родителей",
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         EpicTask epicTaskFirst =
-                new EpicTask(
+                manager.createEpicTask(
                         "Pinguin Project",
                         "Написать бэк для сервиса полнотекстового поиска",
                         UUID.randomUUID());
 
         SubTask subTaskFirst =
-                new SubTask(
+                manager.createSubTask(
                         "Разработать API-обработки запросов",
                         "Пишем несколько методов для обработки JSON",
                         UUID.randomUUID(),
@@ -46,7 +46,7 @@ public class Main {
                         epicTaskFirst.getUUID());
 
         SubTask subTaskSecond =
-                new SubTask(
+                manager.createSubTask(
                         "Протестировать сервис",
                         "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
                         UUID.randomUUID(),
@@ -54,13 +54,13 @@ public class Main {
                         epicTaskFirst.getUUID());
 
         EpicTask epicTaskELK =
-                new EpicTask(
+                manager.createEpicTask(
                         "Изучить систему индексации и полноготекстового поиска ElasticSearch",
                         "Изучаем ELK-стек",
                         UUID.randomUUID());
 
         SubTask subTaskELK =
-                new SubTask(
+                manager.createSubTask(
                         "Читаем ХАБР",
                         "Почитать статьи про ELK",
                         UUID.randomUUID(),
@@ -89,49 +89,43 @@ public class Main {
         // Измените статусы созданных объектов, распечатайте их. Проверьте, что статус задачи и
         // подзадачи сохранился, а статус эпика рассчитался по статусам подзадач.
 
-        taskFirst =
-                new Task(
+        manager.updateTask(
+                manager.createTask(
                         "Рефакторинг кода",
                         "Почистить код от всякого мусора",
                         taskFirst.getUUID(),
-                        TaskStatus.DONE);
+                        TaskStatus.DONE));
 
-        taskSecond =
-                new Task(
+        manager.updateTask(
+                manager.createTask(
                         "Убрать комнату",
                         "Убраться перед приездом родителей",
                         taskSecond.getUUID(),
-                        TaskStatus.IN_PROGRESS);
+                        TaskStatus.IN_PROGRESS));
 
-        subTaskFirst =
-                new SubTask(
+        manager.updateSubTask(
+                manager.createSubTask(
                         "Разработать API-обработки запросов",
                         "Пишем несколько методов для обработки JSON",
                         subTaskFirst.getUUID(),
                         TaskStatus.DONE,
-                        epicTaskFirst.getUUID());
+                        epicTaskFirst.getUUID()));
 
-        subTaskSecond =
-                new SubTask(
+        manager.updateSubTask(
+                manager.createSubTask(
                         "Протестировать сервис",
                         "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
                         subTaskSecond.getUUID(),
                         TaskStatus.IN_PROGRESS,
-                        epicTaskFirst.getUUID());
+                        epicTaskFirst.getUUID()));
 
-        subTaskELK =
-                new SubTask(
+        manager.updateSubTask(
+                manager.createSubTask(
                         "Читаем ХАБР",
                         "Почитать статьи про ELK",
                         subTaskELK.getUUID(),
                         TaskStatus.DONE,
-                        epicTaskELK.getUUID());
-
-        manager.updateTask(taskFirst);
-        manager.updateTask(taskSecond);
-        manager.updateSubTask(subTaskFirst);
-        manager.updateSubTask(subTaskSecond);
-        manager.updateSubTask(subTaskELK);
+                        epicTaskELK.getUUID()));
 
         System.out.println(
                 """
