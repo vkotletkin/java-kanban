@@ -33,11 +33,11 @@ public class Manager {
         return new ArrayList<>(epicTasks.values());
     }
 
-    public void delAllTasks() {
+    public void deleteAllTasks() {
         tasks.clear();
     }
 
-    public void delAllSubTasks() {
+    public void deleteAllSubTasks() {
         subtasks.clear();
         for (EpicTask epicTask : epicTasks.values()) {
             epicTasks.put(
@@ -50,7 +50,7 @@ public class Manager {
         }
     }
 
-    public void delAllEpicTasks() {
+    public void deleteAllEpicTasks() {
         epicTasks.clear();
         subtasks.clear();
     }
@@ -73,7 +73,7 @@ public class Manager {
 
     public void createNewSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
-        updateEpicTaskStatusByUUID(subtask.getEpicTaskUUID());
+        updateEpicStatus(subtask.getEpicTaskUUID());
     }
 
     public void createNewEpicTask(EpicTask epicTask) {
@@ -86,10 +86,10 @@ public class Manager {
 
     public void updateSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
-        updateEpicTaskStatusByUUID(subtask.getEpicTaskUUID());
+        updateEpicStatus(subtask.getEpicTaskUUID());
     }
 
-    private void updateEpicTaskStatusByUUID(UUID uuid) {
+    private void updateEpicStatus(UUID uuid) {
         EpicTask changedEpicTask = epicTasks.get(uuid);
         epicTasks.put(
                 uuid,
@@ -104,17 +104,17 @@ public class Manager {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
 
-    public void delTaskByUUID(UUID uuid) {
+    public void deleteTaskByUUID(UUID uuid) {
         tasks.remove(uuid);
     }
 
-    public void delSubTaskByUUID(UUID uuid) {
+    public void deleteSubTaskByUUID(UUID uuid) {
         UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
         subtasks.remove(uuid);
-        updateEpicTaskStatusByUUID(epicTaskUUID);
+        updateEpicStatus(epicTaskUUID);
     }
 
-    public void delEpicTaskByUUID(UUID uuid) {
+    public void deleteEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
         ArrayList<UUID> uuidsToDelete = new ArrayList<>();
         for (Map.Entry<UUID, SubTask> subTask : subtasks.entrySet()) {

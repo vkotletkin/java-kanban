@@ -147,8 +147,8 @@ public class Main {
 
         // И, наконец, попробуйте удалить одну из задач и один из эпиков.
 
-        manager.delTaskByUUID(taskFirst.getUUID());
-        manager.delEpicTaskByUUID(epicTaskFirst.getUUID());
+        manager.deleteTaskByUUID(taskFirst.getUUID());
+        manager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
 
         System.out.println(
                 """
