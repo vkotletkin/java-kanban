@@ -1,9 +1,9 @@
-package com.yandex.practicum.interfaces;
+package com.practicum.yandex.interfaces;
 
-import com.yandex.practicum.tasks.EpicTask;
-import com.yandex.practicum.tasks.SubTask;
-import com.yandex.practicum.tasks.Task;
-import com.yandex.practicum.tasks.statuses.TaskStatus;
+import com.practicum.yandex.tasks.EpicTask;
+import com.practicum.yandex.tasks.SubTask;
+import com.practicum.yandex.tasks.Task;
+import com.practicum.yandex.tasks.statuses.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.UUID;

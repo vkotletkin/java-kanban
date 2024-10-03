@@ -1,7 +1,7 @@
-package com.yandex.practicum.repositories;
+package com.practicum.yandex.repositories;
 
-import com.yandex.practicum.interfaces.HistoryManager;
-import com.yandex.practicum.tasks.Task;
+import com.practicum.yandex.tasks.Task;
+import com.practicum.yandex.interfaces.HistoryManager;
 
 import java.util.ArrayList;
 

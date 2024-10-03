@@ -1,9 +1,11 @@
-import com.yandex.practicum.interfaces.TaskManager;
-import com.yandex.practicum.services.Managers;
-import com.yandex.practicum.tasks.EpicTask;
-import com.yandex.practicum.tasks.SubTask;
-import com.yandex.practicum.tasks.Task;
-import com.yandex.practicum.tasks.statuses.TaskStatus;
+package com.practicum.yandex;
+
+import com.practicum.yandex.interfaces.TaskManager;
+import com.practicum.yandex.services.Managers;
+import com.practicum.yandex.tasks.EpicTask;
+import com.practicum.yandex.tasks.SubTask;
+import com.practicum.yandex.tasks.Task;
+import com.practicum.yandex.tasks.statuses.TaskStatus;
 
 import java.util.UUID;
 
@@ -143,7 +145,7 @@ public class Main {
         // И, наконец, попробуйте удалить одну из задач и один из эпиков.
 
         //        inMemoryTaskManager.deleteTaskByUUID(taskFirst.getUUID());
-               inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
+        inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
 
         System.out.println(
                 """
@@ -153,9 +155,7 @@ public class Main {
 
 
                 """);
-        System.out.println(inMemoryTaskManager.getTaskByUUID(taskFirst.getUUID()));
-        System.out.println(inMemoryTaskManager.getSubTaskByUUID(subTaskELK.getUUID()));
-        System.out.println(inMemoryTaskManager.getEpicTaskByUUID(epicTaskFirst.getUUID()));
+
         System.out.println(inMemoryTaskManager.getTasks());
         System.out.println(inMemoryTaskManager.getEpicTasks());
         System.out.println(inMemoryTaskManager.getSubTasks());

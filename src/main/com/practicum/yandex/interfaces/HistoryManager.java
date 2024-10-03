@@ -1,6 +1,7 @@
-package com.yandex.practicum.interfaces;
+package com.practicum.yandex.interfaces;
 
-import com.yandex.practicum.tasks.Task;
+import com.practicum.yandex.tasks.Task;
+
 import java.util.ArrayList;
 
 public interface HistoryManager {

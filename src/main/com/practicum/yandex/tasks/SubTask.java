@@ -1,6 +1,6 @@
-package com.yandex.practicum.tasks;
+package com.practicum.yandex.tasks;
 
-import com.yandex.practicum.tasks.statuses.TaskStatus;
+import com.practicum.yandex.tasks.statuses.TaskStatus;
 
 import java.util.UUID;
 
