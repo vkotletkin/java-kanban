@@ -143,7 +143,7 @@ public class Main {
         // И, наконец, попробуйте удалить одну из задач и один из эпиков.
 
         //        inMemoryTaskManager.deleteTaskByUUID(taskFirst.getUUID());
-        //        inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
+               inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
 
         System.out.println(
                 """
@@ -153,7 +153,9 @@ public class Main {
 
 
                 """);
-
+        System.out.println(inMemoryTaskManager.getTaskByUUID(taskFirst.getUUID()));
+        System.out.println(inMemoryTaskManager.getSubTaskByUUID(subTaskELK.getUUID()));
+        System.out.println(inMemoryTaskManager.getEpicTaskByUUID(epicTaskFirst.getUUID()));
         System.out.println(inMemoryTaskManager.getTasks());
         System.out.println(inMemoryTaskManager.getEpicTasks());
         System.out.println(inMemoryTaskManager.getSubTasks());

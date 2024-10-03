@@ -6,7 +6,6 @@ import com.yandex.practicum.repositories.InMemoryHistoryManager;
 import com.yandex.practicum.repositories.InMemoryTaskManager;
 
 public class Managers {
-    public Managers() {}
 
     public static TaskManager getDefault() {
         return new InMemoryTaskManager();
