@@ -1,5 +1,6 @@
 package com.yandex.practicum.services;
 
+import com.yandex.practicum.interfaces.TaskManager;
 import com.yandex.practicum.tasks.EpicTask;
 import com.yandex.practicum.tasks.SubTask;
 import com.yandex.practicum.tasks.Task;
@@ -10,46 +11,54 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     private final HashMap<UUID, Task> tasks;
     private final HashMap<UUID, SubTask> subtasks;
     private final HashMap<UUID, EpicTask> epicTasks;
 
-    public Manager() {
+    public InMemoryTaskManager() {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epicTasks = new HashMap<>();
     }
 
+    @Override
     public Task createTask(String name, String description, UUID uuid, TaskStatus taskStatus) {
         return new Task(name, description, uuid, taskStatus);
     }
 
+    @Override
     public SubTask createSubTask(
             String name, String description, UUID uuid, TaskStatus taskStatus, UUID epicTaskUUID) {
         return new SubTask(name, description, uuid, taskStatus, epicTaskUUID);
     }
 
+    @Override
     public EpicTask createEpicTask(String name, String description, UUID uuid) {
         return new EpicTask(name, description, uuid);
     }
 
+    @Override
     public ArrayList<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }
 
+    @Override
     public ArrayList<SubTask> getSubTasks() {
         return new ArrayList<>(subtasks.values());
     }
 
+    @Override
     public ArrayList<EpicTask> getEpicTasks() {
         return new ArrayList<>(epicTasks.values());
     }
 
+    @Override
     public void deleteAllTasks() {
         tasks.clear();
     }
 
+    @Override
     public void deleteAllSubTasks() {
         subtasks.clear();
         for (EpicTask epicTask : epicTasks.values()) {
@@ -63,40 +72,49 @@ public class Manager {
         }
     }
 
+    @Override
     public void deleteAllEpicTasks() {
         epicTasks.clear();
         subtasks.clear();
     }
 
+    @Override
     public Task getTaskByUUID(UUID uuid) {
         return tasks.get(uuid);
     }
 
+    @Override
     public SubTask getSubTaskByUUID(UUID uuid) {
         return subtasks.get(uuid);
     }
 
+    @Override
     public EpicTask getEpicTaskByUUID(UUID uuid) {
         return epicTasks.get(uuid);
     }
 
+    @Override
     public void createNewTask(Task task) {
         tasks.put(task.getUUID(), task);
     }
 
+    @Override
     public void createNewSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
     }
 
+    @Override
     public void createNewEpicTask(EpicTask epicTask) {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
 
+    @Override
     public void updateTask(Task task) {
         tasks.put(task.getUUID(), task);
     }
 
+    @Override
     public void updateSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
@@ -113,20 +131,24 @@ public class Manager {
                         calculateEpicTaskStatus(changedEpicTask.getUUID())));
     }
 
+    @Override
     public void updateEpicTask(EpicTask epicTask) {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
 
+    @Override
     public void deleteTaskByUUID(UUID uuid) {
         tasks.remove(uuid);
     }
 
+    @Override
     public void deleteSubTaskByUUID(UUID uuid) {
         UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
         subtasks.remove(uuid);
         updateEpicStatus(epicTaskUUID);
     }
 
+    @Override
     public void deleteEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
         ArrayList<UUID> uuidsToDelete = new ArrayList<>();
@@ -140,6 +162,7 @@ public class Manager {
         }
     }
 
+    @Override
     public ArrayList<SubTask> getEpicSubTasks(UUID epicUUID) {
         ArrayList<SubTask> epicSubtasks = new ArrayList<>();
         for (SubTask subtask : subtasks.values()) {

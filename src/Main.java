@@ -1,4 +1,4 @@
-import com.yandex.practicum.services.Manager;
+import com.yandex.practicum.services.InMemoryTaskManager;
 import com.yandex.practicum.tasks.EpicTask;
 import com.yandex.practicum.tasks.SubTask;
 import com.yandex.practicum.tasks.Task;
@@ -11,34 +11,34 @@ public class Main {
     public static void main(String[] args) {
 
         // Тестирование по Т
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
-        Manager manager = new Manager();
-
-        // Классы созданы именно так, а не переданы сразу в manager, так как нужно сохранить UUID
+        // Классы созданы именно так, а не переданы сразу в inMemoryTaskManager, так как нужно
+        // сохранить UUID
         // для дальнейших действий
 
         Task taskFirst =
-                manager.createTask(
+                inMemoryTaskManager.createTask(
                         "Рефакторинг кода",
                         "Почистить код от всякого мусора",
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
-                manager.createTask(
+                inMemoryTaskManager.createTask(
                         "Убрать комнату",
                         "Убраться перед приездом родителей",
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         EpicTask epicTaskFirst =
-                manager.createEpicTask(
+                inMemoryTaskManager.createEpicTask(
                         "Pinguin Project",
                         "Написать бэк для сервиса полнотекстового поиска",
                         UUID.randomUUID());
 
         SubTask subTaskFirst =
-                manager.createSubTask(
+                inMemoryTaskManager.createSubTask(
                         "Разработать API-обработки запросов",
                         "Пишем несколько методов для обработки JSON",
                         UUID.randomUUID(),
@@ -46,7 +46,7 @@ public class Main {
                         epicTaskFirst.getUUID());
 
         SubTask subTaskSecond =
-                manager.createSubTask(
+                inMemoryTaskManager.createSubTask(
                         "Протестировать сервис",
                         "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
                         UUID.randomUUID(),
@@ -54,13 +54,13 @@ public class Main {
                         epicTaskFirst.getUUID());
 
         EpicTask epicTaskELK =
-                manager.createEpicTask(
+                inMemoryTaskManager.createEpicTask(
                         "Изучить систему индексации и полноготекстового поиска ElasticSearch",
                         "Изучаем ELK-стек",
                         UUID.randomUUID());
 
         SubTask subTaskELK =
-                manager.createSubTask(
+                inMemoryTaskManager.createSubTask(
                         "Читаем ХАБР",
                         "Почитать статьи про ELK",
                         UUID.randomUUID(),
@@ -69,58 +69,58 @@ public class Main {
 
         // Создайте две задачи, а также эпик с двумя подзадачами и эпик с одной подзадачей.
 
-        manager.createNewTask(taskFirst);
-        manager.createNewTask(taskSecond);
+        inMemoryTaskManager.createNewTask(taskFirst);
+        inMemoryTaskManager.createNewTask(taskSecond);
 
-        manager.createNewEpicTask(epicTaskFirst);
+        inMemoryTaskManager.createNewEpicTask(epicTaskFirst);
 
-        manager.createNewSubTask(subTaskFirst);
-        manager.createNewSubTask(subTaskSecond);
+        inMemoryTaskManager.createNewSubTask(subTaskFirst);
+        inMemoryTaskManager.createNewSubTask(subTaskSecond);
 
-        manager.createNewEpicTask(epicTaskELK);
+        inMemoryTaskManager.createNewEpicTask(epicTaskELK);
 
-        manager.createNewSubTask(subTaskELK);
+        inMemoryTaskManager.createNewSubTask(subTaskELK);
 
         // Распечатайте списки эпиков, задач и подзадач через System.out.println()
-        System.out.println(manager.getTasks());
-        System.out.println(manager.getEpicTasks());
-        System.out.println(manager.getSubTasks());
+        System.out.println(inMemoryTaskManager.getTasks());
+        System.out.println(inMemoryTaskManager.getEpicTasks());
+        System.out.println(inMemoryTaskManager.getSubTasks());
 
         // Измените статусы созданных объектов, распечатайте их. Проверьте, что статус задачи и
         // подзадачи сохранился, а статус эпика рассчитался по статусам подзадач.
 
-        manager.updateTask(
-                manager.createTask(
+        inMemoryTaskManager.updateTask(
+                inMemoryTaskManager.createTask(
                         "Рефакторинг кода",
                         "Почистить код от всякого мусора",
                         taskFirst.getUUID(),
                         TaskStatus.DONE));
 
-        manager.updateTask(
-                manager.createTask(
+        inMemoryTaskManager.updateTask(
+                inMemoryTaskManager.createTask(
                         "Убрать комнату",
                         "Убраться перед приездом родителей",
                         taskSecond.getUUID(),
                         TaskStatus.IN_PROGRESS));
 
-        manager.updateSubTask(
-                manager.createSubTask(
+        inMemoryTaskManager.updateSubTask(
+                inMemoryTaskManager.createSubTask(
                         "Разработать API-обработки запросов",
                         "Пишем несколько методов для обработки JSON",
                         subTaskFirst.getUUID(),
                         TaskStatus.DONE,
                         epicTaskFirst.getUUID()));
 
-        manager.updateSubTask(
-                manager.createSubTask(
+        inMemoryTaskManager.updateSubTask(
+                inMemoryTaskManager.createSubTask(
                         "Протестировать сервис",
                         "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
                         subTaskSecond.getUUID(),
                         TaskStatus.IN_PROGRESS,
                         epicTaskFirst.getUUID()));
 
-        manager.updateSubTask(
-                manager.createSubTask(
+        inMemoryTaskManager.updateSubTask(
+                inMemoryTaskManager.createSubTask(
                         "Читаем ХАБР",
                         "Почитать статьи про ELK",
                         subTaskELK.getUUID(),
@@ -135,14 +135,14 @@ public class Main {
 
                 """);
 
-        System.out.println(manager.getTasks());
-        System.out.println(manager.getEpicTasks());
-        System.out.println(manager.getSubTasks());
+        System.out.println(inMemoryTaskManager.getTasks());
+        System.out.println(inMemoryTaskManager.getEpicTasks());
+        System.out.println(inMemoryTaskManager.getSubTasks());
 
         // И, наконец, попробуйте удалить одну из задач и один из эпиков.
 
-        manager.deleteTaskByUUID(taskFirst.getUUID());
-        manager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
+        inMemoryTaskManager.deleteTaskByUUID(taskFirst.getUUID());
+        inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
 
         System.out.println(
                 """
@@ -153,8 +153,8 @@ public class Main {
 
                 """);
 
-        System.out.println(manager.getTasks());
-        System.out.println(manager.getEpicTasks());
-        System.out.println(manager.getSubTasks());
+        System.out.println(inMemoryTaskManager.getTasks());
+        System.out.println(inMemoryTaskManager.getEpicTasks());
+        System.out.println(inMemoryTaskManager.getSubTasks());
     }
 }
