@@ -1,4 +1,5 @@
-import com.yandex.practicum.services.InMemoryTaskManager;
+import com.yandex.practicum.interfaces.TaskManager;
+import com.yandex.practicum.services.Managers;
 import com.yandex.practicum.tasks.EpicTask;
 import com.yandex.practicum.tasks.SubTask;
 import com.yandex.practicum.tasks.Task;
@@ -11,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Тестирование по Т
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        TaskManager inMemoryTaskManager = Managers.getDefault();
 
         // Классы созданы именно так, а не переданы сразу в inMemoryTaskManager, так как нужно
         // сохранить UUID
@@ -141,8 +142,8 @@ public class Main {
 
         // И, наконец, попробуйте удалить одну из задач и один из эпиков.
 
-        inMemoryTaskManager.deleteTaskByUUID(taskFirst.getUUID());
-        inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
+        //        inMemoryTaskManager.deleteTaskByUUID(taskFirst.getUUID());
+        //        inMemoryTaskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
 
         System.out.println(
                 """
@@ -156,5 +157,6 @@ public class Main {
         System.out.println(inMemoryTaskManager.getTasks());
         System.out.println(inMemoryTaskManager.getEpicTasks());
         System.out.println(inMemoryTaskManager.getSubTasks());
+        System.out.println(inMemoryTaskManager.getHistory());
     }
 }

@@ -53,4 +53,6 @@ public interface TaskManager {
     void deleteEpicTaskByUUID(UUID uuid);
 
     ArrayList<SubTask> getEpicSubTasks(UUID epicUUID);
+
+    ArrayList<Task> getHistory();
 }

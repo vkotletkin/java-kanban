@@ -46,11 +46,6 @@ public class Task {
                 && taskStatus == task.taskStatus;
     }
 
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(name, description, uuid, taskStatus);
-//    }
-
     public String getName() {
         return name;
     }
