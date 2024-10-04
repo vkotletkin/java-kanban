@@ -120,6 +120,6 @@ public class InMemoryHistoryManagerTest {
         taskManager.getEpicTaskByUUID(epicTaskUUID);
         taskManager.getEpicTaskByUUID(epicTaskUUID);
 
-        Assertions.assertEquals(taskManager.getHistory().size(), 10);
+        Assertions.assertEquals(10, taskManager.getHistory().size());
     }
 }

@@ -91,4 +91,22 @@ class TaskTest {
 
         Assertions.assertEquals(subTaskFirst, subTaskELK);
     }
+
+    @Test
+    public void shouldReturnCorrectToString() {
+        UUID uuid = UUID.randomUUID();
+
+        Task taskFirst =
+                taskManager.createTask(
+                        "Рефакторинг кода",
+                        "Почистить код от всякого мусора",
+                        uuid,
+                        TaskStatus.NEW);
+
+        Assertions.assertEquals(
+                String.format(
+                        "Task{name='Рефакторинг кода', description='Почистить код от всякого мусора', uuid=%s, taskStatus=NEW}",
+                        uuid),
+                taskFirst.toString());
+    }
 }
