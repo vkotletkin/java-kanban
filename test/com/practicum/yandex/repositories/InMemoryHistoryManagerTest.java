@@ -8,24 +8,18 @@ import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 public class InMemoryHistoryManagerTest {
-    public static TaskManager taskManager;
 
-    @BeforeAll
-    public static void beforeAll() {
-        taskManager = Managers.getDefault();
-    }
+    // Рекомендуемый тест: убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую
+    // версию задачи и её данных.
 
-    // Рекомендуемый тест:
-    // проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти
-    // их по id;
     @Test
-    public void shouldCreateTasksAndCanSearchHimOnId() {
+    public void shouldManagerSaveLastRequestedTasks() {
+        TaskManager taskManager = Managers.getDefault();
 
         UUID epicTaskUUID = UUID.randomUUID();
         UUID subTaskUUID = UUID.randomUUID();
@@ -56,49 +50,24 @@ public class InMemoryHistoryManagerTest {
         taskManager.addNewEpicTask(epicTask);
         taskManager.addNewSubTask(subTask);
 
-        Assertions.assertEquals(taskManager.getTaskByUUID(taskUUID), task);
-        Assertions.assertEquals(taskManager.getSubTaskByUUID(subTaskUUID), subTask);
-        Assertions.assertEquals(taskManager.getEpicTaskByUUID(epicTaskUUID), epicTask);
-    }
+        taskManager.getTaskByUUID(taskUUID);
+        taskManager.getSubTaskByUUID(subTaskUUID);
+        taskManager.getEpicTaskByUUID(epicTaskUUID);
 
-    // Рекомендуемый тест: проверьте, что задачи с заданным id и сгенерированным id не конфликтуют
-    // внутри менеджера;
-    @Test
-    public void shouldNotConflitsDifferentTasksWithDifferentsUUID() {
-        UUID uuid = UUID.randomUUID();
-
-        Task taskWithGeneratedUUID =
+        task =
                 taskManager.createTask(
-                        "Рефакторинг кода", "Почистить код от всякого мусора", TaskStatus.NEW);
-
-        Task taskWithoutGeneratedUUID =
-                taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
-                        uuid,
-                        TaskStatus.NEW);
-
-        Assertions.assertNotEquals(taskWithGeneratedUUID, taskWithoutGeneratedUUID);
-    }
-
-    @Test
-    public void shouldNotChangesObjectFieldsAfterAddToManager() {
-        UUID uuid = UUID.randomUUID();
-
-        Task task =
-                taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
-                        uuid,
-                        TaskStatus.NEW);
+                        "Меняем объект", "Изменено описание", taskUUID, TaskStatus.NEW);
 
         taskManager.addNewTask(task);
 
-        Task getTask = taskManager.getTaskByUUID(uuid);
+        taskManager.getTaskByUUID(taskUUID);
 
-        Assertions.assertEquals(getTask.getName(), task.getName());
-        Assertions.assertEquals(getTask.getDescription(), task.getDescription());
-        Assertions.assertEquals(getTask.getUUID(), task.getUUID());
-        Assertions.assertEquals(getTask.getTaskStatus(), task.getTaskStatus());
+        Assertions.assertEquals(
+                taskManager.getHistory().get(0).getUUID(),
+                taskManager.getHistory().get(3).getUUID());
+
+        Assertions.assertNotEquals(
+                taskManager.getHistory().get(0).getDescription(),
+                taskManager.getHistory().get(3).getDescription());
     }
 }
