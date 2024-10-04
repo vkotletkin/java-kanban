@@ -17,7 +17,7 @@ public class InMemoryTaskManagerTest {
     public static TaskManager taskManager;
 
     @BeforeEach
-    public void beforeAll() {
+    public void beforeEach() {
         taskManager = Managers.getDefault();
     }
 
@@ -100,5 +100,90 @@ public class InMemoryTaskManagerTest {
         Assertions.assertEquals(getTask.getDescription(), task.getDescription());
         Assertions.assertEquals(getTask.getUUID(), task.getUUID());
         Assertions.assertEquals(getTask.getTaskStatus(), task.getTaskStatus());
+    }
+
+    @Test
+    public void shouldBeEmptyListOfEpicTasks() {
+        EpicTask epicTaskFirst =
+                taskManager.createEpicTask(
+                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+
+        EpicTask epicTaskSecond =
+                taskManager.createEpicTask(
+                        "Develop Project", "Реализовать голосовой проигрыватель");
+
+        EpicTask epicTaskThird =
+                taskManager.createEpicTask("Andromeda Project", "Написать документацию");
+
+        taskManager.addNewEpicTask(epicTaskFirst);
+        taskManager.addNewEpicTask(epicTaskSecond);
+        taskManager.addNewEpicTask(epicTaskThird);
+
+        Assertions.assertNotEquals(0, taskManager.getEpicTasks().size());
+
+        taskManager.deleteAllEpicTasks();
+
+        Assertions.assertEquals(0, taskManager.getEpicTasks().size());
+    }
+
+    @Test
+    public void shouldBeEmptyListOfTasks() {
+        Task task =
+                taskManager.createTask(
+                        "Рефакторинг кода", "Почистить код от всякого мусора", TaskStatus.NEW);
+
+        taskManager.addNewTask(task);
+
+        Assertions.assertNotEquals(0, taskManager.getTasks().size());
+
+        taskManager.deleteAllTasks();
+
+        Assertions.assertEquals(0, taskManager.getTasks().size());
+    }
+
+    @Test
+    public void shouldBeEmptyListOfSubTasks() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        "Разработать API-обработки запросов",
+                        "Пишем несколько методов для обработки JSON",
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        SubTask subTaskSecond =
+                taskManager.createSubTask(
+                        "Проанализировать документацию",
+                        "Изучить архитектурные паттерны разработки проекта",
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
+        taskManager.addNewSubTask(subTaskSecond);
+
+        Assertions.assertNotEquals(2, taskManager.getTasks().size());
+
+        taskManager.deleteAllSubTasks();
+
+        Assertions.assertEquals(0, taskManager.getSubTasks().size());
+    }
+
+    @Test
+    public void shouldBeReturnNullOnDeletedEpicTask() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+
+        taskManager.addNewEpicTask(epicTask);
+
+        Assertions.assertEquals(1, taskManager.getEpicTasks().size());
+
+        taskManager.deleteEpicTaskByUUID(epicTask.getUUID());
+
+        Assertions.assertNull(taskManager.getEpicTaskByUUID(epicTask.getUUID()));
     }
 }
