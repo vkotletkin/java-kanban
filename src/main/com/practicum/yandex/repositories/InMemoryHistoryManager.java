@@ -1,7 +1,7 @@
 package com.practicum.yandex.repositories;
 
-import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.interfaces.HistoryManager;
+import com.practicum.yandex.tasks.Task;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,12 @@ public class InMemoryHistoryManager implements HistoryManager {
                 this.lastTasks.remove(0);
             }
 
-            this.lastTasks.add(task);
+            this.lastTasks.add(
+                    new Task(
+                            task.getName(),
+                            task.getDescription(),
+                            task.getUUID(),
+                            task.getTaskStatus()));
         }
     }
 }

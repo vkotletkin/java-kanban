@@ -72,17 +72,17 @@ public class Main {
 
         // Создайте две задачи, а также эпик с двумя подзадачами и эпик с одной подзадачей.
 
-        inMemoryTaskManager.createNewTask(taskFirst);
-        inMemoryTaskManager.createNewTask(taskSecond);
-
-        inMemoryTaskManager.createNewEpicTask(epicTaskFirst);
-
-        inMemoryTaskManager.createNewSubTask(subTaskFirst);
-        inMemoryTaskManager.createNewSubTask(subTaskSecond);
-
-        inMemoryTaskManager.createNewEpicTask(epicTaskELK);
-
-        inMemoryTaskManager.createNewSubTask(subTaskELK);
+//        inMemoryTaskManager.createNewTask(taskFirst);
+//        inMemoryTaskManager.createNewTask(taskSecond);
+//
+//        inMemoryTaskManager.createNewEpicTask(epicTaskFirst);
+//
+//        inMemoryTaskManager.createNewSubTask(subTaskFirst);
+//        inMemoryTaskManager.createNewSubTask(subTaskSecond);
+//
+//        inMemoryTaskManager.createNewEpicTask(epicTaskELK);
+//
+//        inMemoryTaskManager.createNewSubTask(subTaskELK);
 
         // Распечатайте списки эпиков, задач и подзадач через System.out.println()
         System.out.println(inMemoryTaskManager.getTasks());

@@ -33,14 +33,30 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public Task createTask(String name, String description, TaskStatus taskStatus) {
+        return new Task(name, description, taskStatus);
+    }
+
+    @Override
     public SubTask createSubTask(
             String name, String description, UUID uuid, TaskStatus taskStatus, UUID epicTaskUUID) {
         return new SubTask(name, description, uuid, taskStatus, epicTaskUUID);
     }
 
     @Override
+    public SubTask createSubTask(
+            String name, String description, TaskStatus taskStatus, UUID epicTaskUUID) {
+        return new SubTask(name, description, taskStatus, epicTaskUUID);
+    }
+
+    @Override
     public EpicTask createEpicTask(String name, String description, UUID uuid) {
         return new EpicTask(name, description, uuid);
+    }
+
+    @Override
+    public EpicTask createEpicTask(String name, String description) {
+        return new EpicTask(name, description);
     }
 
     @Override
@@ -102,18 +118,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createNewTask(Task task) {
+    public void addNewTask(Task task) {
         tasks.put(task.getUUID(), task);
     }
 
     @Override
-    public void createNewSubTask(SubTask subtask) {
+    public void addNewSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
     }
 
     @Override
-    public void createNewEpicTask(EpicTask epicTask) {
+    public void addNewEpicTask(EpicTask epicTask) {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
 

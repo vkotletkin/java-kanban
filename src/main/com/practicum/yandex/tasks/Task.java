@@ -35,6 +35,13 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
+    public Task(String name, String description, TaskStatus taskStatus) {
+        this.name = name;
+        this.description = description;
+        this.uuid = UUID.randomUUID();
+        this.taskStatus = taskStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

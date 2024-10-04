@@ -11,10 +11,17 @@ import java.util.UUID;
 public interface TaskManager {
     Task createTask(String name, String description, UUID uuid, TaskStatus taskStatus);
 
+    Task createTask(String name, String description, TaskStatus taskStatus);
+
     SubTask createSubTask(
             String name, String description, UUID uuid, TaskStatus taskStatus, UUID epicTaskUUID);
 
+    SubTask createSubTask(
+            String name, String description, TaskStatus taskStatus, UUID epicTaskUUID);
+
     EpicTask createEpicTask(String name, String description, UUID uuid);
+
+    EpicTask createEpicTask(String name, String description);
 
     ArrayList<Task> getTasks();
 
@@ -34,11 +41,11 @@ public interface TaskManager {
 
     EpicTask getEpicTaskByUUID(UUID uuid);
 
-    void createNewTask(Task task);
+    void addNewTask(Task task);
 
-    void createNewSubTask(SubTask subtask);
+    void addNewSubTask(SubTask subtask);
 
-    void createNewEpicTask(EpicTask epicTask);
+    void addNewEpicTask(EpicTask epicTask);
 
     void updateTask(Task task);
 

@@ -1,4 +1,4 @@
-package test.com.practicum.yandex;
+package test.com.practicum.yandex.tasks;
 
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
@@ -15,6 +15,9 @@ import java.util.UUID;
 
 class TaskTest {
 
+    // Рекомендуемые тесты: проверьте, что экземпляры класса Task равны друг другу, если равен их
+    // id;
+    // проверьте, что наследники класса Task равны друг другу, если равен их id;
     public static TaskManager taskManager;
 
     @BeforeEach
