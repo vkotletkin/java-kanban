@@ -4,12 +4,13 @@ import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 public class SubTaskTest {
 
     public static TaskManager taskManager;
 
-    @BeforeAll
+    @BeforeEach
     public static void beforeAll() {
         taskManager = Managers.getDefault();
     }

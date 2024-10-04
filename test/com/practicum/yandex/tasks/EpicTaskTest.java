@@ -4,13 +4,14 @@ import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 public class EpicTaskTest {
 
     public static TaskManager taskManager;
 
-    @BeforeAll
-    public static void beforeAll() {
+    @BeforeEach
+    public void beforeAll() {
         taskManager = Managers.getDefault();
     }
 

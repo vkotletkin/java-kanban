@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final ArrayList<Task> lastTasks;
+    private static final int MAX_ELEMENTS_IN_HISTORY = 10;
 
     public InMemoryHistoryManager() {
         lastTasks = new ArrayList<>();
@@ -18,7 +19,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public void add(Task task) {
         if (task != null) {
-            if (this.lastTasks.size() == 10) {
+            if (this.lastTasks.size() == MAX_ELEMENTS_IN_HISTORY) {
                 this.lastTasks.remove(0);
             }
 
