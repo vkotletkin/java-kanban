@@ -40,10 +40,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(name, task.name)
-                && Objects.equals(description, task.description)
-                && Objects.equals(uuid, task.uuid)
-                && taskStatus == task.taskStatus;
+        return Objects.equals(uuid, task.uuid);
     }
 
     public String getName() {
