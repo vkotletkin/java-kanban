@@ -15,9 +15,6 @@ import java.util.UUID;
 
 class TaskTest {
 
-    // Рекомендуемые тесты: проверьте, что экземпляры класса Task равны друг другу, если равен их
-    // id;
-    // проверьте, что наследники класса Task равны друг другу, если равен их id;
     public static TaskManager taskManager;
 
     @BeforeEach

@@ -15,9 +15,6 @@ import java.util.UUID;
 
 public class InMemoryHistoryManagerTest {
 
-    // Рекомендуемый тест: убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую
-    // версию задачи и её данных.
-
     public static TaskManager taskManager;
 
     @BeforeEach

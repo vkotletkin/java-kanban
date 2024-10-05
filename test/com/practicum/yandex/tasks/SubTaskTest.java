@@ -21,14 +21,6 @@ public class SubTaskTest {
         taskManager = Managers.getDefault();
     }
 
-    // Рекомендуемый тест:
-    // проверьте, что объект Subtask нельзя сделать своим же эпиком;
-    // Эпик привязывается к объекту SubTask исключительно идентификатору, реализовать данный тест не
-    // представляется возможным
-
-    //    @Test
-    //    public void notShouldEpicTaskBeAddedToItself() {}
-
     @Test
     public void shouldReturnCorrectToString() {
         UUID uuid = UUID.randomUUID();
@@ -52,10 +44,5 @@ public class SubTaskTest {
                                 + " uuid=%s, taskStatus=NEW, epicTaskUUID=%s}",
                         uuid, uuid),
                 subTask.toString());
-    }
-
-    @Test
-    public void shouldReturnEqualSubTask() {
-
     }
 }

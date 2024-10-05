@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class ManagersTest {
 
-    // Рекомендуемый тест: убедитесь, что утилитарный класс всегда возвращает проинициализированные
-    // и готовые к работе экземпляры менеджеров;
     @Test
     public void shouldReturnInitializedManagers() {
         Assertions.assertNotNull(Managers.getDefault());

@@ -21,9 +21,6 @@ public class InMemoryTaskManagerTest {
         taskManager = Managers.getDefault();
     }
 
-    // Рекомендуемый тест:
-    // проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти
-    // их по id;
     @Test
     public void shouldCreateTasksAndCanSearchHimOnId() {
 
@@ -61,8 +58,6 @@ public class InMemoryTaskManagerTest {
         Assertions.assertEquals(taskManager.getEpicTaskByUUID(epicTaskUUID), epicTask);
     }
 
-    // Рекомендуемый тест: проверьте, что задачи с заданным id и сгенерированным id не конфликтуют
-    // внутри менеджера;
     @Test
     public void shouldNotConflitsDifferentTasksWithDifferentsUUID() {
         UUID uuid = UUID.randomUUID();
