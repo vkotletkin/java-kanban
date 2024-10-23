@@ -4,16 +4,17 @@ import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> lastTasks;
+    private final List<Task> lastTasks;
     private static final int MAX_ELEMENTS_IN_HISTORY = 10;
 
     public InMemoryHistoryManager() {
         lastTasks = new ArrayList<>();
     }
 
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return this.lastTasks;
     }
 

@@ -8,15 +8,12 @@ import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<UUID, Task> tasks;
-    private final HashMap<UUID, SubTask> subtasks;
-    private final HashMap<UUID, EpicTask> epicTasks;
+    private final Map<UUID, Task> tasks;
+    private final Map<UUID, SubTask> subtasks;
+    private final Map<UUID, EpicTask> epicTasks;
 
     private final HistoryManager historyManager;
 
@@ -60,17 +57,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<SubTask> getSubTasks() {
+    public List<SubTask> getSubTasks() {
         return new ArrayList<>(subtasks.values());
     }
 
     @Override
-    public ArrayList<EpicTask> getEpicTasks() {
+    public List<EpicTask> getEpicTasks() {
         return new ArrayList<>(epicTasks.values());
     }
 
@@ -175,7 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
-        ArrayList<UUID> uuidsToDelete = new ArrayList<>();
+        List<UUID> uuidsToDelete = new ArrayList<>();
         for (Map.Entry<UUID, SubTask> subTask : subtasks.entrySet()) {
             if (subTask.getValue().getEpicTaskUUID().equals(uuid)) {
                 uuidsToDelete.add(subTask.getValue().getUUID());
@@ -187,8 +184,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getEpicSubTasks(UUID epicUUID) {
-        ArrayList<SubTask> epicSubtasks = new ArrayList<>();
+    public List<SubTask> getEpicSubTasks(UUID epicUUID) {
+        List<SubTask> epicSubtasks = new ArrayList<>();
         for (SubTask subtask : subtasks.values()) {
             if (subtask.getEpicTaskUUID().equals(epicUUID)) {
                 epicSubtasks.add(subtask);
@@ -222,7 +219,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 }
