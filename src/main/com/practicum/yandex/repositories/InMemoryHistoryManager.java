@@ -41,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         } else if (prev == null && next == null) {
             node = null;
             return;
-        } else {
+        } else if (prev != null && next != null) {
             prev.setNext(next);
             next.setPrev(prev);
         }

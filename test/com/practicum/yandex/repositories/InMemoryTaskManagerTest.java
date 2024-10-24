@@ -185,7 +185,15 @@ public class InMemoryTaskManagerTest {
                 taskManager.createEpicTask(
                         "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
 
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        "Разработать API-обработки запросов",
+                        "Пишем несколько методов для обработки JSON",
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
         taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
 
         Assertions.assertEquals(1, taskManager.getEpicTasks().size());
 
@@ -194,5 +202,51 @@ public class InMemoryTaskManagerTest {
         Assertions.assertNull(taskManager.getEpicTaskByUUID(epicTask.getUUID()));
     }
 
+    @Test
+    public void shouldBeReturnNullOnDeletedSubTask() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
 
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        "Разработать API-обработки запросов",
+                        "Пишем несколько методов для обработки JSON",
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
+
+        taskManager.deleteSubTaskByUUID(subTaskFirst.getUUID());
+
+        Assertions.assertNull(taskManager.getSubTaskByUUID(epicTask.getUUID()));
+    }
+
+    @Test
+    public void shouldBeReturnEpicSubTaskList() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        "Разработать API-обработки запросов",
+                        "Пишем несколько методов для обработки JSON",
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        SubTask subTaskSecond =
+                taskManager.createSubTask(
+                        "Проанализировать документацию",
+                        "Изучить архитектурные паттерны разработки проекта",
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
+        taskManager.addNewSubTask(subTaskSecond);
+
+        Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
+    }
 }
