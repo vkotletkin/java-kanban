@@ -32,12 +32,15 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node prev = node.getPrev();
         final Node next = node.getNext();
 
-        if (node == head) {
+        if (node == head && next != null) {
             next.setPrev(null);
             head = next;
-        } else if (node == tail) {
+        } else if (node == tail && prev != null) {
             prev.setNext(null);
             tail = prev;
+        } else if (prev == null && next == null) {
+            node = null;
+            return;
         } else {
             prev.setNext(next);
             next.setPrev(prev);

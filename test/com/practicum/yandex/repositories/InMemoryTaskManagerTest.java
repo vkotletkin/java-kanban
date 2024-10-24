@@ -110,9 +110,21 @@ public class InMemoryTaskManagerTest {
         EpicTask epicTaskThird =
                 taskManager.createEpicTask("Andromeda Project", "Написать документацию");
 
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        "Разработать API-обработки запросов",
+                        "Пишем несколько методов для обработки JSON",
+                        UUID.randomUUID(),
+                        TaskStatus.NEW,
+                        epicTaskFirst.getUUID());
+
         taskManager.addNewEpicTask(epicTaskFirst);
         taskManager.addNewEpicTask(epicTaskSecond);
         taskManager.addNewEpicTask(epicTaskThird);
+        taskManager.addNewSubTask(subTaskFirst);
+        taskManager.getEpicTaskByUUID(epicTaskFirst.getUUID());
+        taskManager.getEpicTaskByUUID(epicTaskSecond.getUUID());
+        taskManager.getSubTaskByUUID(subTaskFirst.getUUID());
 
         Assertions.assertNotEquals(0, taskManager.getEpicTasks().size());
 
@@ -181,4 +193,6 @@ public class InMemoryTaskManagerTest {
 
         Assertions.assertNull(taskManager.getEpicTaskByUUID(epicTask.getUUID()));
     }
+
+
 }

@@ -3,7 +3,7 @@ package com.practicum.yandex.utils;
 import com.practicum.yandex.tasks.Task;
 
 public class Node {
-    private Task task;
+    private final Task task;
     private Node next;
     private Node prev;
 
@@ -15,10 +15,6 @@ public class Node {
 
     public Task getTask() {
         return task;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
     }
 
     public Node getNext() {
