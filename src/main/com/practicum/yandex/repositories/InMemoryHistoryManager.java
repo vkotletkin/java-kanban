@@ -70,8 +70,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
-        remove(task.getUUID());
         linkLast(task);
+        remove(task.getUUID());
         lastTasks.put(task.getUUID(), tail);
     }
 }

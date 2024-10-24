@@ -71,7 +71,11 @@ public class Main {
         taskManager.addNewSubTask(subTaskThird);
 
         taskManager.getTaskByUUID(taskFirst.getUUID());
+        taskManager.getTaskByUUID(taskFirst.getUUID());
+        taskManager.getTaskByUUID(taskFirst.getUUID());
         taskManager.getTaskByUUID(taskSecond.getUUID());
+        taskManager.getTaskByUUID(taskFirst.getUUID());
+        taskManager.getTaskByUUID(taskFirst.getUUID());
         taskManager.getTaskByUUID(taskFirst.getUUID());
         taskManager.getTaskByUUID(taskSecond.getUUID());
         taskManager.getEpicTaskByUUID(epicTaskFirst.getUUID());
