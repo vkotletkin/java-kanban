@@ -73,11 +73,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
+        for (UUID uuid : tasks.keySet()) {
+            historyManager.remove(uuid);
+        }
         tasks.clear();
     }
 
     @Override
     public void deleteAllSubTasks() {
+        for (UUID uuid : subtasks.keySet()) {
+            historyManager.remove(uuid);
+        }
         subtasks.clear();
         for (EpicTask epicTask : epicTasks.values()) {
             epicTasks.put(
@@ -92,6 +98,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpicTasks() {
+        for (UUID uuid : epicTasks.keySet()) {
+            historyManager.remove(uuid);
+        }
+
+        for (UUID uuid : subtasks.keySet()) {
+            historyManager.remove(uuid);
+        }
+
         epicTasks.clear();
         subtasks.clear();
     }
@@ -152,19 +166,20 @@ public class InMemoryTaskManager implements TaskManager {
                         calculateEpicTaskStatus(changedEpicTask.getUUID())));
     }
 
-    @Override
     public void updateEpicTask(EpicTask epicTask) {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
 
     @Override
     public void deleteTaskByUUID(UUID uuid) {
+        historyManager.remove(uuid);
         tasks.remove(uuid);
     }
 
     @Override
     public void deleteSubTaskByUUID(UUID uuid) {
         UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
+        historyManager.remove(uuid);
         subtasks.remove(uuid);
         updateEpicStatus(epicTaskUUID);
     }
@@ -172,6 +187,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
+        historyManager.remove(uuid);
         List<UUID> uuidsToDelete = new ArrayList<>();
         for (Map.Entry<UUID, SubTask> subTask : subtasks.entrySet()) {
             if (subTask.getValue().getEpicTaskUUID().equals(uuid)) {
@@ -180,6 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (UUID uuidToDelete : uuidsToDelete) {
             subtasks.remove(uuidToDelete);
+            historyManager.remove(uuidToDelete);
         }
     }
 

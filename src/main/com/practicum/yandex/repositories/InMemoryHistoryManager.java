@@ -7,37 +7,71 @@ import com.practicum.yandex.utils.Node;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
-    // TODO DELETE private final List<Task> lastTasks;
-
-    // TODO DELETE private static final int MAX_ELEMENTS_IN_HISTORY = 10;
-    private final Map<UUID, Node> lastTasks = new HashMap<>();
+    private final Map<UUID, Node> lastTasks;
+    private Node head;
+    private Node tail;
 
     public InMemoryHistoryManager() {
-        lastTasks = new ArrayList<>();
+        lastTasks = new HashMap<>();
     }
 
     public List<Task> getHistory() {
-        return this.lastTasks;
+        return getTasks();
+    }
+
+    public void remove(UUID uuid) {
+        removeNode(lastTasks.get(uuid));
+        lastTasks.remove(uuid);
+    }
+
+    private void removeNode(Node node) {
+        if (node == null) {
+            return;
+        }
+
+        final Node prev = node.getPrev();
+        final Node next = node.getNext();
+
+        if (node == head) {
+            next.setPrev(null);
+            head = next;
+        } else if (node == tail) {
+            prev.setNext(null);
+            tail = prev;
+        } else {
+            prev.setNext(next);
+            next.setPrev(prev);
+        }
+    }
+
+    public void linkLast(Task task) {
+        final Node oldLast = tail;
+        final Node newNode = new Node(oldLast, task, null);
+        tail = newNode;
+        if (oldLast == null) {
+            head = newNode;
+        } else {
+            oldLast.setNext(newNode);
+        }
+    }
+
+    public List<Task> getTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
+        Node node = head;
+
+        while (node != null) {
+            tasks.add(node.getTask());
+            node = node.getNext();
+        }
+        return tasks;
     }
 
     public void add(Task task) {
-        if (task != null) {
-            // TODO Delete
-            //            if (this.lastTasks.size() == MAX_ELEMENTS_IN_HISTORY) {
-            //                this.lastTasks.remove(0);
-            //            }
-
-            this.lastTasks.add(
-                    new Task(
-                            task.getName(),
-                            task.getDescription(),
-                            task.getUUID(),
-                            task.getTaskStatus()));
+        if (task == null) {
+            return;
         }
+        remove(task.getUUID());
+        linkLast(task);
+        lastTasks.put(task.getUUID(), tail);
     }
-}
-
-class TaskLinkedList {
-
 }
