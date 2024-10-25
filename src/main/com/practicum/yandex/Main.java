@@ -92,10 +92,14 @@ public class Main {
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        System.out.println("--- After delete taskSecond and epicTaskFirst (with 3 subtasks)");
-        taskManager.deleteTaskByUUID(taskSecond.getUUID());
-        taskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
-
+        System.out.println("--- After delete taskFirst (was been lasted in previous stdout");
+        taskManager.deleteTaskByUUID(taskFirst.getUUID());
         System.out.println(taskManager.getHistory());
+        System.out.println();
+
+        System.out.println("--- After delete epicTask with 3 subTask");
+        taskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
+        System.out.println(taskManager.getHistory());
+        System.out.println();
     }
 }
