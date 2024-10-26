@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import test.com.practicum.yandex.utils.TasksDescriptionForTests;
+
 import java.util.UUID;
 
 public class SubTaskTest {
@@ -27,12 +29,14 @@ public class SubTaskTest {
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска", uuid);
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
+                        uuid);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        "Разработать API-обработки запросов",
-                        "Пишем несколько методов для обработки JSON",
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
                         uuid,
                         TaskStatus.NEW,
                         epicTask.getUUID());

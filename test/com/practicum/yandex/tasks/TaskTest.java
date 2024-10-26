@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import test.com.practicum.yandex.utils.TasksDescriptionForTests;
+
 import java.util.UUID;
 
 class TaskTest {
@@ -95,8 +97,8 @@ class TaskTest {
 
         Task taskFirst =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         uuid,
                         TaskStatus.NEW);
 
