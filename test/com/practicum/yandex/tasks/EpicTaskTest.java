@@ -3,6 +3,7 @@ package test.com.practicum.yandex.tasks;
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
 import com.practicum.yandex.tasks.EpicTask;
+import com.practicum.yandex.utils.TasksDescription;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +34,9 @@ public class EpicTaskTest {
 
         Assertions.assertEquals(
                 String.format(
-                        "EpicTask{name='Pinguin Project', "
-                                + "description='Написать бэк для сервиса полнотекстового поиска',"
-                                + " uuid=%s, taskStatus=NEW}",
+                        "EpicTask{name='%s', " + "description='%s'," + " uuid=%s, taskStatus=NEW}",
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescription.epicPinguinProject.getDescription(),
                         uuid),
                 epicTask.toString());
     }

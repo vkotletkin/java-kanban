@@ -43,10 +43,13 @@ public class SubTaskTest {
 
         Assertions.assertEquals(
                 String.format(
-                        "SubTask{name='Разработать API-обработки запросов', "
-                                + "description='Пишем несколько методов для обработки JSON',"
+                        "SubTask{name='%s', "
+                                + "description='%s',"
                                 + " uuid=%s, taskStatus=NEW, epicTaskUUID=%s}",
-                        uuid, uuid),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        uuid,
+                        uuid),
                 subTask.toString());
     }
 }
