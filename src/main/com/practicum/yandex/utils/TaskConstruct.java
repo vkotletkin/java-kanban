@@ -1,10 +1,10 @@
 package com.practicum.yandex.utils;
 
 public class TaskConstruct {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
 
-    TaskConstruct(String name, String description) {
+    public TaskConstruct(String name, String description) {
         this.name = name;
         this.description = description;
     }

@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import test.com.practicum.yandex.utils.TasksDescriptionForTests;
+
 import java.util.UUID;
 
 public class InMemoryHistoryManagerTest {
@@ -30,21 +32,21 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         taskUUID,
                         TaskStatus.NEW);
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        "Pinguin Project",
-                        "Написать бэк для сервиса полнотекстового поиска",
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
                         epicTaskUUID);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        "Разработать API-обработки запросов",
-                        "Пишем несколько методов для обработки JSON",
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
                         subTaskUUID,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -74,21 +76,21 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         taskUUID,
                         TaskStatus.NEW);
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        "Pinguin Project",
-                        "Написать бэк для сервиса полнотекстового поиска",
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
                         epicTaskUUID);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        "Разработать API-обработки запросов",
-                        "Пишем несколько методов для обработки JSON",
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
                         subTaskUUID,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -118,8 +120,8 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         taskUUID,
                         TaskStatus.NEW);
 
@@ -136,8 +138,8 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         taskUUID,
                         TaskStatus.NEW);
 
