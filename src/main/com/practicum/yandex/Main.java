@@ -6,6 +6,7 @@ import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.TasksDescription;
 
 import java.util.UUID;
 
@@ -14,52 +15,52 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
         Task taskFirst =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.getName(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
                 taskManager.createTask(
-                        "Убрать комнату",
-                        "Убраться перед приездом родителей",
+                        TasksDescription.taskRoomClearing.getName(),
+                        TasksDescription.taskRoomClearing.getDescription(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         EpicTask epicTaskFirst =
                 taskManager.createEpicTask(
-                        "Pinguin Project",
-                        "Написать бэк для сервиса полнотекстового поиска",
+                        TasksDescription.epicPinguinProject.getName(),
+                        TasksDescription.epicPinguinProject.getDescription(),
                         UUID.randomUUID());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        "Разработать API-обработки запросов",
-                        "Пишем несколько методов для обработки JSON",
+                        TasksDescription.subTaskRequestsAPI.getName(),
+                        TasksDescription.subTaskRequestsAPI.getDescription(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         SubTask subTaskSecond =
                 taskManager.createSubTask(
-                        "Протестировать сервис",
-                        "Навесить юнит-тесты и провести тестировочную нагрузку через Apache JMeter",
+                        TasksDescription.subTaskServiceTesting.getName(),
+                        TasksDescription.subTaskServiceTesting.getDescription(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         SubTask subTaskThird =
                 taskManager.createSubTask(
-                        "Написать документацию",
-                        "Описать основные методы и функционал",
+                        TasksDescription.subTaskDocumentationWriting.getName(),
+                        TasksDescription.subTaskDocumentationWriting.getDescription(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         EpicTask epicTaskElasticKibana =
                 taskManager.createEpicTask(
-                        "Изучить систему индексации и полноготекстового поиска ElasticSearch",
-                        "Изучаем ELK-стек",
+                        TasksDescription.epicELKStack.getName(),
+                        TasksDescription.epicELKStack.getDescription(),
                         UUID.randomUUID());
 
         taskManager.addNewTask(taskFirst);
