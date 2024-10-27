@@ -6,10 +6,13 @@ import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.TasksDescription;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import test.com.practicum.yandex.utils.TasksDescriptionForTests;
 
 import java.util.UUID;
 
@@ -95,14 +98,16 @@ class TaskTest {
 
         Task taskFirst =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         uuid,
                         TaskStatus.NEW);
 
         Assertions.assertEquals(
                 String.format(
-                        "Task{name='Рефакторинг кода', description='Почистить код от всякого мусора', uuid=%s, taskStatus=NEW}",
+                        "Task{name='%s', description='%s', uuid=%s, taskStatus=NEW}",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.getDescription(),
                         uuid),
                 taskFirst.toString());
     }

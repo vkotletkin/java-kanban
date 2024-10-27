@@ -5,7 +5,7 @@ import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public interface TaskManager {
@@ -23,11 +23,11 @@ public interface TaskManager {
 
     EpicTask createEpicTask(String name, String description);
 
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<SubTask> getSubTasks();
+    List<SubTask> getSubTasks();
 
-    ArrayList<EpicTask> getEpicTasks();
+    List<EpicTask> getEpicTasks();
 
     void deleteAllTasks();
 
@@ -51,15 +51,14 @@ public interface TaskManager {
 
     void updateSubTask(SubTask subtask);
 
-    void updateEpicTask(EpicTask epicTask);
-
     void deleteTaskByUUID(UUID uuid);
 
     void deleteSubTaskByUUID(UUID uuid);
 
     void deleteEpicTaskByUUID(UUID uuid);
 
-    ArrayList<SubTask> getEpicSubTasks(UUID epicUUID);
+    List<SubTask> getEpicSubTasks(UUID epicUUID);
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
+
 }

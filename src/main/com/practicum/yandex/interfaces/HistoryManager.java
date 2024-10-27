@@ -2,10 +2,13 @@ package com.practicum.yandex.interfaces;
 
 import com.practicum.yandex.tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public interface HistoryManager {
     void add(Task task);
 
-    ArrayList<Task> getHistory();
+    void remove(UUID uuid);
+
+    List<Task> getHistory();
 }

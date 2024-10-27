@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import test.com.practicum.yandex.utils.TasksDescriptionForTests;
+
 import java.util.UUID;
 
 public class InMemoryTaskManagerTest {
@@ -30,21 +32,21 @@ public class InMemoryTaskManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         taskUUID,
                         TaskStatus.NEW);
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        "Pinguin Project",
-                        "Написать бэк для сервиса полнотекстового поиска",
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
                         epicTaskUUID);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        "Разработать API-обработки запросов",
-                        "Пишем несколько методов для обработки JSON",
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
                         subTaskUUID,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -64,12 +66,14 @@ public class InMemoryTaskManagerTest {
 
         Task taskWithGeneratedUUID =
                 taskManager.createTask(
-                        "Рефакторинг кода", "Почистить код от всякого мусора", TaskStatus.NEW);
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TaskStatus.NEW);
 
         Task taskWithoutGeneratedUUID =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         uuid,
                         TaskStatus.NEW);
 
@@ -82,8 +86,8 @@ public class InMemoryTaskManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода",
-                        "Почистить код от всякого мусора",
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
                         uuid,
                         TaskStatus.NEW);
 
@@ -101,18 +105,34 @@ public class InMemoryTaskManagerTest {
     public void shouldBeEmptyListOfEpicTasks() {
         EpicTask epicTaskFirst =
                 taskManager.createEpicTask(
-                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription());
 
         EpicTask epicTaskSecond =
                 taskManager.createEpicTask(
-                        "Develop Project", "Реализовать голосовой проигрыватель");
+                        TasksDescriptionForTests.epicDevelopProject.getName(),
+                        TasksDescriptionForTests.epicDevelopProject.getDescription());
 
         EpicTask epicTaskThird =
-                taskManager.createEpicTask("Andromeda Project", "Написать документацию");
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicAndromedaProject.getName(),
+                        TasksDescriptionForTests.epicAndromedaProject.getDescription());
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        UUID.randomUUID(),
+                        TaskStatus.NEW,
+                        epicTaskFirst.getUUID());
 
         taskManager.addNewEpicTask(epicTaskFirst);
         taskManager.addNewEpicTask(epicTaskSecond);
         taskManager.addNewEpicTask(epicTaskThird);
+        taskManager.addNewSubTask(subTaskFirst);
+        taskManager.getEpicTaskByUUID(epicTaskFirst.getUUID());
+        taskManager.getEpicTaskByUUID(epicTaskSecond.getUUID());
+        taskManager.getSubTaskByUUID(subTaskFirst.getUUID());
 
         Assertions.assertNotEquals(0, taskManager.getEpicTasks().size());
 
@@ -125,7 +145,9 @@ public class InMemoryTaskManagerTest {
     public void shouldBeEmptyListOfTasks() {
         Task task =
                 taskManager.createTask(
-                        "Рефакторинг кода", "Почистить код от всякого мусора", TaskStatus.NEW);
+                        TasksDescriptionForTests.taskRefactoringCode.getName(),
+                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TaskStatus.NEW);
 
         taskManager.addNewTask(task);
 
@@ -140,19 +162,20 @@ public class InMemoryTaskManagerTest {
     public void shouldBeEmptyListOfSubTasks() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        "Разработать API-обработки запросов",
-                        "Пишем несколько методов для обработки JSON",
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
         SubTask subTaskSecond =
                 taskManager.createSubTask(
-                        "Проанализировать документацию",
-                        "Изучить архитектурные паттерны разработки проекта",
+                        TasksDescriptionForTests.subTaskDocumentationWriting.getName(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.getDescription(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
@@ -171,14 +194,73 @@ public class InMemoryTaskManagerTest {
     public void shouldBeReturnNullOnDeletedEpicTask() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        "Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
 
         taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
 
         Assertions.assertEquals(1, taskManager.getEpicTasks().size());
 
         taskManager.deleteEpicTaskByUUID(epicTask.getUUID());
 
         Assertions.assertNull(taskManager.getEpicTaskByUUID(epicTask.getUUID()));
+    }
+
+    @Test
+    public void shouldBeReturnNullOnDeletedSubTask() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
+
+        taskManager.deleteSubTaskByUUID(subTaskFirst.getUUID());
+
+        Assertions.assertNull(taskManager.getSubTaskByUUID(epicTask.getUUID()));
+    }
+
+    @Test
+    public void shouldBeReturnEpicSubTaskList() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicPinguinProject.getName(),
+                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        SubTask subTaskSecond =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskDocumentationWriting.getName(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.getDescription(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
+        taskManager.addNewSubTask(subTaskSecond);
+
+        Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
     }
 }
