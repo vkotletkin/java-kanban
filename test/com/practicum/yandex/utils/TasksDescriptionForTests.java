@@ -11,6 +11,7 @@ public class TasksDescriptionForTests {
 
     public static TaskConstruct epicPinguinProject =
             new TaskConstruct("Pinguin Project", "Написать бэк для сервиса полнотекстового поиска");
+
     public static TaskConstruct epicELKStack =
             new TaskConstruct(
                     "Изучаем ELK-стек",
@@ -18,6 +19,7 @@ public class TasksDescriptionForTests {
 
     public static TaskConstruct epicDevelopProject =
             new TaskConstruct("Develop Project", "Реализовать голосовой проигрыватель");
+
     public static TaskConstruct epicAndromedaProject =
             new TaskConstruct("Andromeda Project", "Написать документацию к проекту Andromeda");
 
@@ -33,6 +35,4 @@ public class TasksDescriptionForTests {
 
     public static TaskConstruct subTaskDocumentationWriting =
             new TaskConstruct("Написать документацию", "Описать основные методы и функционал");
-
-
 }
