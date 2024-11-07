@@ -11,5 +11,6 @@ public class ManagersTest {
     public void shouldReturnInitializedManagers() {
         Assertions.assertNotNull(Managers.getDefault());
         Assertions.assertNotNull(Managers.getDefaultHistory());
+        Assertions.assertNotNull(Managers.getFileBackedTaskManager());
     }
 }
