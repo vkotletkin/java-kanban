@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
+        TaskManager taskManager = Managers.getFileBackedTaskManager();
         Task taskFirst =
                 taskManager.createTask(
                         TasksDescription.taskRefactoringCode.getName(),
@@ -93,12 +93,12 @@ public class Main {
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        System.out.println("--- After delete taskFirst (was been lasted in previous stdout");
+        System.out.println("--- After delete taskFirst (was been lasted in previous stdout --- ");
         taskManager.deleteTaskByUUID(taskFirst.getUUID());
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        System.out.println("--- After delete epicTask with 3 subTask");
+        System.out.println("--- After delete epicTask with 3 subTask --- ");
         taskManager.deleteEpicTaskByUUID(epicTaskFirst.getUUID());
         System.out.println(taskManager.getHistory());
         System.out.println();
