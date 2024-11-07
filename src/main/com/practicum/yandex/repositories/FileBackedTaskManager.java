@@ -1,6 +1,7 @@
 package com.practicum.yandex.repositories;
 
 import com.practicum.yandex.exceptions.ManagerSaveException;
+import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
 import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
@@ -27,11 +28,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         pathToFileSave = DEFAULT_PATH_TO_FILE_MANAGER_STATE;
     }
 
-    public static FileBackedTaskManager loadFromFile(String pathToFile) {
-        FileBackedTaskManager fileBackedTaskManager = Managers.getFileBackedTaskManager();
+    public static TaskManager loadFromFile(String pathToFile) {
+        TaskManager fileBackedTaskManager = Managers.getFileBackedTaskManager();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(pathToFile))) {
-            int lineCounter = 0;
 
             bufferedReader.readLine();
 
@@ -189,7 +189,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         String pathToTestFile = "manager-state-test.csv";
 
-        FileBackedTaskManager fileBackedTaskManagerFirst = new FileBackedTaskManager(pathToTestFile);
+        TaskManager fileBackedTaskManagerFirst = Managers.getFileBackedTaskManager(pathToTestFile);
 
         Task taskFirst =
                 fileBackedTaskManagerFirst.createTask(
@@ -249,7 +249,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         fileBackedTaskManagerFirst.addNewSubTask(subTaskSecond);
         fileBackedTaskManagerFirst.addNewSubTask(subTaskThird);
 
-        FileBackedTaskManager fileBackedTaskManagerSecond =
+        TaskManager fileBackedTaskManagerSecond =
                 FileBackedTaskManager.loadFromFile(pathToTestFile);
 
         System.out.println("Сравнение Tasks:");

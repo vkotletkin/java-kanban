@@ -12,11 +12,11 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
-    public static FileBackedTaskManager getFileBackedTaskManager() {
+    public static TaskManager getFileBackedTaskManager() {
         return new FileBackedTaskManager();
     }
 
-    public static FileBackedTaskManager getFileBackedTaskManager(String pathToFileSave) {
+    public static TaskManager getFileBackedTaskManager(String pathToFileSave) {
         return new FileBackedTaskManager(pathToFileSave);
     }
 
