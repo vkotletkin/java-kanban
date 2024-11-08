@@ -18,7 +18,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String DEFAULT_PATH_TO_FILE_MANAGER_STATE = "manager-state-file.csv";
 
     private final String pathToFileSave;
-    private static final boolean IS_DEBUG = true;
 
     public FileBackedTaskManager(String pathToFile) {
         this.pathToFileSave = pathToFile;
@@ -66,9 +65,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             return fileBackedTaskManager;
         } catch (IOException e) {
-            if (IS_DEBUG) {
-                e.printStackTrace();
-            }
             throw new ManagerSaveException("Файл по указанному пути не существует!");
         }
     }
@@ -91,9 +87,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
         } catch (IOException e) {
-            if (IS_DEBUG) {
-                e.printStackTrace();
-            }
             throw new ManagerSaveException("Ошибка при сохранении данных в файл!");
         }
     }
