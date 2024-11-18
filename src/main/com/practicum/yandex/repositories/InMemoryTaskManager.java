@@ -7,7 +7,10 @@ import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.EpicTimeMetrics;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -16,6 +19,8 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<UUID, EpicTask> epicTasks;
 
     private final HistoryManager historyManager;
+
+    // private final List<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
@@ -34,6 +39,25 @@ public class InMemoryTaskManager implements TaskManager {
         return new Task(name, description, taskStatus);
     }
 
+    public Task createTask(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new Task(name, description, uuid, taskStatus, startTime, duration);
+    }
+
+    public Task createTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new Task(name, description, taskStatus, startTime, duration);
+    }
+
     @Override
     public SubTask createSubTask(
             String name, String description, UUID uuid, TaskStatus taskStatus, UUID epicTaskUUID) {
@@ -46,6 +70,27 @@ public class InMemoryTaskManager implements TaskManager {
         return new SubTask(name, description, taskStatus, epicTaskUUID);
     }
 
+    public SubTask createSubTask(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            UUID epicTaskUUID,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new SubTask(name, description, uuid, taskStatus, epicTaskUUID, startTime, duration);
+    }
+
+    public SubTask createSubTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            UUID epicTaskUUID,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new SubTask(name, description, taskStatus, epicTaskUUID, startTime, duration);
+    }
+
     @Override
     public EpicTask createEpicTask(String name, String description, UUID uuid) {
         return new EpicTask(name, description, uuid);
@@ -54,6 +99,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public EpicTask createEpicTask(String name, String description) {
         return new EpicTask(name, description);
+    }
+
+    public EpicTask createEpicTask(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Duration duration) {
+        return new EpicTask(name, description, uuid, taskStatus, startTime, endTime, duration);
     }
 
     @Override
@@ -157,13 +213,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void updateEpicStatus(UUID uuid) {
         EpicTask changedEpicTask = epicTasks.get(uuid);
+        EpicTimeMetrics epicTimeMetrics = calculateEpicTimeMetrics(uuid);
         epicTasks.put(
                 uuid,
                 new EpicTask(
                         changedEpicTask.getName(),
                         changedEpicTask.getDescription(),
                         changedEpicTask.getUUID(),
-                        calculateEpicTaskStatus(changedEpicTask.getUUID())));
+                        calculateEpicTaskStatus(changedEpicTask.getUUID()),
+                        epicTimeMetrics.getStartDateTime(),
+                        epicTimeMetrics.getEndDateTime(),
+                        epicTimeMetrics.getDuration()));
     }
 
     public void updateEpicTask(EpicTask epicTask) {
@@ -209,6 +269,41 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         return epicSubtasks;
+    }
+
+    //    public List<Task> getPrioritizedTasks() {}
+
+    private EpicTimeMetrics calculateEpicTimeMetrics(UUID uuid) {
+        List<LocalDateTime> startDateTimes = new ArrayList<>();
+        List<Duration> subtasksDurations = new ArrayList<>();
+
+        for (SubTask subtask : subtasks.values()) {
+            if (subtask.getEpicTaskUUID().equals(uuid)) {
+                startDateTimes.add(subtask.getStartTime());
+                subtasksDurations.add(subtask.getDuration());
+            }
+        }
+
+        Optional<LocalDateTime> earlierStartDateTime = Optional.empty();
+        Optional<LocalDateTime> lastStartDateTime = Optional.empty();
+
+        if (startDateTimes.size() != 0) {
+            startDateTimes.sort(LocalDateTime::compareTo);
+            earlierStartDateTime = Optional.ofNullable(startDateTimes.get(0));
+            lastStartDateTime = Optional.ofNullable(startDateTimes.get(startDateTimes.size() - 1));
+        }
+
+        Duration sumOfDurations = Duration.ofSeconds(0);
+
+        for (Duration duration : subtasksDurations) {
+            sumOfDurations = sumOfDurations.plus(duration);
+        }
+
+        if (earlierStartDateTime.isPresent() && lastStartDateTime.isPresent()) {
+            return new EpicTimeMetrics(
+                    earlierStartDateTime.get(), lastStartDateTime.get(), sumOfDurations);
+        }
+        return new EpicTimeMetrics(null, null, sumOfDurations);
     }
 
     private TaskStatus calculateEpicTaskStatus(UUID uuid) {
