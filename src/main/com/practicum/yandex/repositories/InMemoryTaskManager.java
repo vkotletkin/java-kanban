@@ -279,12 +279,12 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
         historyManager.remove(uuid);
-        List<UUID> uuidsToDelete = new ArrayList<>();
-        for (Map.Entry<UUID, SubTask> subTask : subtasks.entrySet()) {
-            if (subTask.getValue().getEpicTaskUUID().equals(uuid)) {
-                uuidsToDelete.add(subTask.getValue().getUUID());
-            }
-        }
+        List<UUID> uuidsToDelete =
+                subtasks.values().stream()
+                        .filter(subTask -> subTask.getEpicTaskUUID().equals(uuid))
+                        .map(Task::getUUID)
+                        .toList();
+
         for (UUID uuidToDelete : uuidsToDelete) {
             subtasks.remove(uuidToDelete);
             historyManager.remove(uuidToDelete);
@@ -293,13 +293,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<SubTask> getEpicSubTasks(UUID epicUUID) {
-        List<SubTask> epicSubtasks = new ArrayList<>();
-        for (SubTask subtask : subtasks.values()) {
-            if (subtask.getEpicTaskUUID().equals(epicUUID)) {
-                epicSubtasks.add(subtask);
-            }
-        }
-        return epicSubtasks;
+        return subtasks.values().stream()
+                .filter(subTask -> subTask.getEpicTaskUUID().equals(epicUUID))
+                .toList();
     }
 
     private TimeMetrics calculateEpicTimeMetrics(UUID uuid) {
