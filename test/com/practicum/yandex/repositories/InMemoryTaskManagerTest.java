@@ -271,4 +271,49 @@ public class InMemoryTaskManagerTest {
 
         Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
     }
+
+    @Test
+    public void shouldCorrectlyIntersectTimeLines() {
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
+
+        SubTask subTaskFirst =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.localDateTime(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.duration());
+
+        SubTask subTaskSecond =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.localDateTime(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.duration());
+
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTaskFirst);
+        taskManager.addNewSubTask(subTaskSecond);
+
+        Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
+
+        SubTask subTaskThird =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
+                        TaskStatus.NEW,
+                        epicTask.getUUID(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.localDateTime(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.duration());
+
+        taskManager.addNewSubTask(subTaskThird);
+
+        Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
+    }
 }
