@@ -246,7 +246,7 @@ public class InMemoryTaskManager implements TaskManager {
         TimeMetrics timeMetrics = calculateEpicTimeMetrics(uuid);
         epicTasks.put(
                 uuid,
-                new EpicTask(
+                new EpicTask( // TODO check not null value UUID EPIC!!
                         changedEpicTask.getName(),
                         changedEpicTask.getDescription(),
                         changedEpicTask.getUUID(),
