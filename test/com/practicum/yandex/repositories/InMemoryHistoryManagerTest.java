@@ -32,21 +32,21 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         taskUUID,
                         TaskStatus.NEW);
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
                         epicTaskUUID);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         subTaskUUID,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -76,21 +76,21 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         taskUUID,
                         TaskStatus.NEW);
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
                         epicTaskUUID);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         subTaskUUID,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -120,8 +120,8 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         taskUUID,
                         TaskStatus.NEW);
 
@@ -138,8 +138,8 @@ public class InMemoryHistoryManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         taskUUID,
                         TaskStatus.NEW);
 

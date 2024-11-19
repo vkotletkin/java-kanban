@@ -208,52 +208,52 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         Task taskFirst =
                 fileBackedTaskManagerFirst.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
                 fileBackedTaskManagerFirst.createTask(
-                        TasksDescription.taskRoomClearing.getName(),
-                        TasksDescription.taskRoomClearing.getDescription(),
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         EpicTask epicTaskFirst =
                 fileBackedTaskManagerFirst.createEpicTask(
-                        TasksDescription.epicPinguinProject.getName(),
-                        TasksDescription.epicPinguinProject.getDescription(),
+                        TasksDescription.epicPinguinProject.name(),
+                        TasksDescription.epicPinguinProject.description(),
                         UUID.randomUUID());
 
         SubTask subTaskFirst =
                 fileBackedTaskManagerFirst.createSubTask(
-                        TasksDescription.subTaskRequestsAPI.getName(),
-                        TasksDescription.subTaskRequestsAPI.getDescription(),
+                        TasksDescription.subTaskRequestsAPI.name(),
+                        TasksDescription.subTaskRequestsAPI.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         SubTask subTaskSecond =
                 fileBackedTaskManagerFirst.createSubTask(
-                        TasksDescription.subTaskServiceTesting.getName(),
-                        TasksDescription.subTaskServiceTesting.getDescription(),
+                        TasksDescription.subTaskServiceTesting.name(),
+                        TasksDescription.subTaskServiceTesting.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         SubTask subTaskThird =
                 fileBackedTaskManagerFirst.createSubTask(
-                        TasksDescription.subTaskDocumentationWriting.getName(),
-                        TasksDescription.subTaskDocumentationWriting.getDescription(),
+                        TasksDescription.subTaskDocumentationWriting.name(),
+                        TasksDescription.subTaskDocumentationWriting.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         EpicTask epicTaskElasticKibana =
                 fileBackedTaskManagerFirst.createEpicTask(
-                        TasksDescription.epicELKStack.getName(),
-                        TasksDescription.epicELKStack.getDescription(),
+                        TasksDescription.epicELKStack.name(),
+                        TasksDescription.epicELKStack.description(),
                         UUID.randomUUID());
 
         fileBackedTaskManagerFirst.addNewTask(taskFirst);

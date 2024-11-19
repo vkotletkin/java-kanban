@@ -32,21 +32,21 @@ public class InMemoryTaskManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         taskUUID,
                         TaskStatus.NEW);
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
                         epicTaskUUID);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         subTaskUUID,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -66,14 +66,14 @@ public class InMemoryTaskManagerTest {
 
         Task taskWithGeneratedUUID =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         TaskStatus.NEW);
 
         Task taskWithoutGeneratedUUID =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         uuid,
                         TaskStatus.NEW);
 
@@ -86,8 +86,8 @@ public class InMemoryTaskManagerTest {
 
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         uuid,
                         TaskStatus.NEW);
 
@@ -105,23 +105,23 @@ public class InMemoryTaskManagerTest {
     public void shouldBeEmptyListOfEpicTasks() {
         EpicTask epicTaskFirst =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
 
         EpicTask epicTaskSecond =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicDevelopProject.getName(),
-                        TasksDescriptionForTests.epicDevelopProject.getDescription());
+                        TasksDescriptionForTests.epicDevelopProject.name(),
+                        TasksDescriptionForTests.epicDevelopProject.description());
 
         EpicTask epicTaskThird =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicAndromedaProject.getName(),
-                        TasksDescriptionForTests.epicAndromedaProject.getDescription());
+                        TasksDescriptionForTests.epicAndromedaProject.name(),
+                        TasksDescriptionForTests.epicAndromedaProject.description());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
@@ -145,8 +145,8 @@ public class InMemoryTaskManagerTest {
     public void shouldBeEmptyListOfTasks() {
         Task task =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         TaskStatus.NEW);
 
         taskManager.addNewTask(task);
@@ -162,20 +162,20 @@ public class InMemoryTaskManagerTest {
     public void shouldBeEmptyListOfSubTasks() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
         SubTask subTaskSecond =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskDocumentationWriting.getName(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.getDescription(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
@@ -194,13 +194,13 @@ public class InMemoryTaskManagerTest {
     public void shouldBeReturnNullOnDeletedEpicTask() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
@@ -218,13 +218,13 @@ public class InMemoryTaskManagerTest {
     public void shouldBeReturnNullOnDeletedSubTask() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
@@ -240,20 +240,20 @@ public class InMemoryTaskManagerTest {
     public void shouldBeReturnEpicSubTaskList() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription());
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
 
         SubTask subTaskFirst =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 
         SubTask subTaskSecond =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskDocumentationWriting.getName(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.getDescription(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
                         TaskStatus.NEW,
                         epicTask.getUUID());
 

@@ -47,8 +47,8 @@ public class FileBackedTaskManagerTest {
         TaskManager taskManager = Managers.getFileBackedTaskManager();
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
@@ -73,15 +73,15 @@ public class FileBackedTaskManagerTest {
 
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
                 taskManager.createTask(
-                        TasksDescription.taskRoomClearing.getName(),
-                        TasksDescription.taskRoomClearing.getDescription(),
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
@@ -97,15 +97,15 @@ public class FileBackedTaskManagerTest {
 
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
                 taskManager.createTask(
-                        TasksDescription.taskRoomClearing.getName(),
-                        TasksDescription.taskRoomClearing.getDescription(),
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 

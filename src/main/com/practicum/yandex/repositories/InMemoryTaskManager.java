@@ -20,13 +20,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager;
 
-    // private final List<Task> prioritizedTasks;
+    private final Set<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epicTasks = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+        prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
     }
 
     @Override
@@ -39,6 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new Task(name, description, taskStatus);
     }
 
+    @Override
     public Task createTask(
             String name,
             String description,
@@ -49,6 +51,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new Task(name, description, uuid, taskStatus, startTime, duration);
     }
 
+    @Override
     public Task createTask(
             String name,
             String description,
@@ -70,6 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new SubTask(name, description, taskStatus, epicTaskUUID);
     }
 
+    @Override
     public SubTask createSubTask(
             String name,
             String description,
@@ -81,6 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new SubTask(name, description, uuid, taskStatus, epicTaskUUID, startTime, duration);
     }
 
+    @Override
     public SubTask createSubTask(
             String name,
             String description,
@@ -101,6 +106,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new EpicTask(name, description);
     }
 
+    @Override
     public EpicTask createEpicTask(
             String name,
             String description,
@@ -187,12 +193,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addNewTask(Task task) {
         tasks.put(task.getUUID(), task);
+        prioritizedTasks.add(task);
     }
 
     @Override
     public void addNewSubTask(SubTask subtask) {
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
+        prioritizedTasks.add(subtask);
     }
 
     @Override
@@ -226,6 +234,7 @@ public class InMemoryTaskManager implements TaskManager {
                         epicTimeMetrics.getDuration()));
     }
 
+    @Override
     public void updateEpicTask(EpicTask epicTask) {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
@@ -270,8 +279,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return epicSubtasks;
     }
-
-    //    public List<Task> getPrioritizedTasks() {}
 
     private EpicTimeMetrics calculateEpicTimeMetrics(UUID uuid) {
         List<LocalDateTime> startDateTimes = new ArrayList<>();
@@ -333,5 +340,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    public Set<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
     }
 }
