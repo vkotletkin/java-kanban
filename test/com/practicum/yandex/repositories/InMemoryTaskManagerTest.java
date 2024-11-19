@@ -35,7 +35,9 @@ public class InMemoryTaskManagerTest {
                         TasksDescriptionForTests.taskRefactoringCode.name(),
                         TasksDescriptionForTests.taskRefactoringCode.description(),
                         taskUUID,
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescriptionForTests.taskRefactoringCode.localDateTime(),
+                        TasksDescriptionForTests.taskRefactoringCode.duration());
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
@@ -49,7 +51,9 @@ public class InMemoryTaskManagerTest {
                         TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         subTaskUUID,
                         TaskStatus.NEW,
-                        epicTask.getUUID());
+                        epicTask.getUUID(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.localDateTime(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.duration());
 
         taskManager.addNewTask(task);
         taskManager.addNewEpicTask(epicTask);
@@ -248,14 +252,18 @@ public class InMemoryTaskManagerTest {
                         TasksDescriptionForTests.subTaskRequestsAPI.name(),
                         TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         TaskStatus.NEW,
-                        epicTask.getUUID());
+                        epicTask.getUUID(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.localDateTime(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.duration());
 
         SubTask subTaskSecond =
                 taskManager.createSubTask(
                         TasksDescriptionForTests.subTaskDocumentationWriting.name(),
                         TasksDescriptionForTests.subTaskDocumentationWriting.description(),
                         TaskStatus.NEW,
-                        epicTask.getUUID());
+                        epicTask.getUUID(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.localDateTime(),
+                        TasksDescriptionForTests.subTaskDocumentationWriting.duration());
 
         taskManager.addNewEpicTask(epicTask);
         taskManager.addNewSubTask(subTaskFirst);

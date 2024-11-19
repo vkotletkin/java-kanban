@@ -76,14 +76,18 @@ public class FileBackedTaskManagerTest {
                         TasksDescription.taskRefactoringCode.name(),
                         TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRefactoringCode.localDateTime(),
+                        TasksDescription.taskRefactoringCode.duration());
 
         Task taskSecond =
                 taskManager.createTask(
                         TasksDescription.taskRoomClearing.name(),
                         TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration());
 
         taskManager.addNewTask(taskFirst);
         taskManager.addNewTask(taskSecond);
@@ -92,7 +96,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    public void shouldLoadFewTasks() {
+    public void shouldLoadOneTasks() {
         TaskManager taskManager = Managers.getFileBackedTaskManager(file.getPath());
 
         Task taskFirst =
@@ -100,14 +104,18 @@ public class FileBackedTaskManagerTest {
                         TasksDescription.taskRefactoringCode.name(),
                         TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRefactoringCode.localDateTime(),
+                        TasksDescription.taskRefactoringCode.duration());
 
         Task taskSecond =
                 taskManager.createTask(
                         TasksDescription.taskRoomClearing.name(),
                         TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration());
 
         taskManager.addNewTask(taskFirst);
         taskManager.addNewTask(taskSecond);

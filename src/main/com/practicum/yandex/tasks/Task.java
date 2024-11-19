@@ -1,6 +1,7 @@
 package com.practicum.yandex.tasks;
 
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.TimeMetrics;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -101,6 +102,10 @@ public class Task {
 
     public TaskStatus getTaskStatus() {
         return taskStatus;
+    }
+
+    public TimeMetrics getTimeMetrics() {
+        return new TimeMetrics(getStartTime(), getEndTime(), getDuration());
     }
 
     public LocalDateTime getStartTime() {

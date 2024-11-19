@@ -7,7 +7,7 @@ import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
-import com.practicum.yandex.utils.EpicTimeMetrics;
+import com.practicum.yandex.utils.TimeMetrics;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -192,12 +192,34 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addNewTask(Task task) {
+        if (isIntervalsIntersection(task)) {
+            System.out.println(
+                    "Время начала задачи пересекается с существующей. Добавление отклонено.");
+            return;
+        }
         tasks.put(task.getUUID(), task);
         prioritizedTasks.add(task);
     }
 
+    private boolean isIntervalsIntersection(Task task) {
+        List<Boolean> intervalsCheckResult =
+                prioritizedTasks.stream()
+                        .map(
+                                streamTask ->
+                                        checkIntersectionOnIntervals(
+                                                streamTask.getTimeMetrics(), task.getTimeMetrics()))
+                        .toList();
+
+        return intervalsCheckResult.contains(true);
+    }
+
     @Override
     public void addNewSubTask(SubTask subtask) {
+        if (isIntervalsIntersection(subtask)) {
+            System.out.println(
+                    "Время начала задачи пересекается с существующей. Добавление отклонено.");
+            return;
+        }
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
         prioritizedTasks.add(subtask);
@@ -221,7 +243,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void updateEpicStatus(UUID uuid) {
         EpicTask changedEpicTask = epicTasks.get(uuid);
-        EpicTimeMetrics epicTimeMetrics = calculateEpicTimeMetrics(uuid);
+        TimeMetrics timeMetrics = calculateEpicTimeMetrics(uuid);
         epicTasks.put(
                 uuid,
                 new EpicTask(
@@ -229,9 +251,9 @@ public class InMemoryTaskManager implements TaskManager {
                         changedEpicTask.getDescription(),
                         changedEpicTask.getUUID(),
                         calculateEpicTaskStatus(changedEpicTask.getUUID()),
-                        epicTimeMetrics.getStartDateTime(),
-                        epicTimeMetrics.getEndDateTime(),
-                        epicTimeMetrics.getDuration()));
+                        timeMetrics.getStartDateTime(),
+                        timeMetrics.getEndDateTime(),
+                        timeMetrics.getDuration()));
     }
 
     @Override
@@ -280,7 +302,7 @@ public class InMemoryTaskManager implements TaskManager {
         return epicSubtasks;
     }
 
-    private EpicTimeMetrics calculateEpicTimeMetrics(UUID uuid) {
+    private TimeMetrics calculateEpicTimeMetrics(UUID uuid) {
         List<LocalDateTime> startDateTimes = new ArrayList<>();
         List<Duration> subtasksDurations = new ArrayList<>();
 
@@ -307,10 +329,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         if (earlierStartDateTime.isPresent() && lastStartDateTime.isPresent()) {
-            return new EpicTimeMetrics(
+            return new TimeMetrics(
                     earlierStartDateTime.get(), lastStartDateTime.get(), sumOfDurations);
         }
-        return new EpicTimeMetrics(null, null, sumOfDurations);
+        return new TimeMetrics(null, null, sumOfDurations);
     }
 
     private TaskStatus calculateEpicTaskStatus(UUID uuid) {
@@ -344,5 +366,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;
+    }
+
+    private boolean checkIntersectionOnIntervals(
+            TimeMetrics firstTaskTimeMetrics, TimeMetrics secondTaskTimeMetrics) {
+        return !(firstTaskTimeMetrics
+                        .getEndDateTime()
+                        .isBefore(secondTaskTimeMetrics.getStartDateTime())
+                || firstTaskTimeMetrics
+                        .getStartDateTime()
+                        .isAfter(secondTaskTimeMetrics.getEndDateTime()));
     }
 }
