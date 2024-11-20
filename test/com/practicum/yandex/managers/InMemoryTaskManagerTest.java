@@ -1,4 +1,4 @@
-package test.com.practicum.yandex.repositories;
+package test.com.practicum.yandex.managers;
 
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
@@ -6,6 +6,7 @@ import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.TasksDescription;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import test.com.practicum.yandex.utils.TasksDescriptionForTests;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class InMemoryTaskManagerTest {
@@ -315,5 +318,119 @@ public class InMemoryTaskManagerTest {
         taskManager.addNewSubTask(subTaskThird);
 
         Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
+    }
+
+    @Test
+    public void shouldCreateTaskWithTimeStamp() {
+        Task taskWithGeneratedUUID =
+                taskManager.createTask(
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
+                        TaskStatus.NEW,
+                        TasksDescriptionForTests.taskRefactoringCode.localDateTime(),
+                        TasksDescriptionForTests.taskRefactoringCode.duration());
+
+        taskManager.addNewTask(taskWithGeneratedUUID);
+
+        Assertions.assertEquals(
+                taskWithGeneratedUUID, taskManager.getTaskByUUID(taskWithGeneratedUUID.getUUID()));
+    }
+
+    @Test
+    public void shouldCreateEpicTaskWithAllFields() {
+        UUID uuid = UUID.randomUUID();
+
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
+                        uuid,
+                        TaskStatus.NEW,
+                        LocalDateTime.MIN,
+                        LocalDateTime.MAX,
+                        Duration.ofSeconds(0));
+
+        taskManager.addNewEpicTask(epicTask);
+
+        Assertions.assertEquals(epicTask, taskManager.getEpicTaskByUUID(epicTask.getUUID()));
+    }
+
+    @Test
+    public void shouldUpdateTask() {
+        Task taskFirst =
+                taskManager.createTask(
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        UUID.randomUUID(),
+                        TaskStatus.NEW,
+                        TasksDescription.taskRefactoringCode.localDateTime(),
+                        TasksDescription.taskRefactoringCode.duration());
+
+        Task taskSecond =
+                taskManager.createTask(
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
+                        taskFirst.getUUID(),
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration());
+
+        taskManager.addNewTask(taskFirst);
+        taskManager.updateTask(
+                new Task(
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
+                        taskFirst.getUUID(),
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration()));
+
+        Assertions.assertEquals(taskManager.getTaskByUUID(taskFirst.getUUID()), taskSecond);
+    }
+
+    @Test
+    public void shouldUpdateEpicTask() {
+        EpicTask epicTaskFirst =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description());
+
+        EpicTask epicTaskSecond =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicDevelopProject.name(),
+                        TasksDescriptionForTests.epicDevelopProject.description(),
+                        epicTaskFirst.getUUID());
+
+        taskManager.addNewEpicTask(epicTaskFirst);
+        taskManager.updateEpicTask(epicTaskSecond);
+
+        Assertions.assertEquals(
+                taskManager.getEpicTaskByUUID(epicTaskFirst.getUUID()), epicTaskSecond);
+    }
+
+    @Test
+    public void checkPrioritizedTasks() {
+        Task taskFirst =
+                taskManager.createTask(
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        UUID.randomUUID(),
+                        TaskStatus.NEW,
+                        TasksDescription.taskRefactoringCode.localDateTime(),
+                        TasksDescription.taskRefactoringCode.duration());
+
+        Task taskSecond =
+                taskManager.createTask(
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
+                        UUID.randomUUID(),
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration());
+
+        taskManager.addNewTask(taskFirst);
+        taskManager.addNewTask(taskSecond);
+
+        Assertions.assertEquals(2, taskManager.getPrioritizedTasks().size());
     }
 }

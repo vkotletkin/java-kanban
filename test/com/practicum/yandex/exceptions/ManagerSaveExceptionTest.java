@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class ManagerSaveExceptionTest {
 
     @Test
-    public void shouldReturnException() {
+    public void shouldReturnManagerSaveException() {
         Assertions.assertThrows(
                 ManagerSaveException.class,
                 () -> {

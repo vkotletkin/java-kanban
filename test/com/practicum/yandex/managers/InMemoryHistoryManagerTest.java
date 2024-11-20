@@ -1,4 +1,4 @@
-package test.com.practicum.yandex.repositories;
+package test.com.practicum.yandex.managers;
 
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;

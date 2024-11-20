@@ -1,10 +1,10 @@
-package test.com.practicum.yandex.repositories;
+package test.com.practicum.yandex.managers;
 
 import static test.com.practicum.yandex.utils.FileBackedDescriptionForTests.fileForManagerData;
 
 import com.practicum.yandex.exceptions.ManagerSaveException;
 import com.practicum.yandex.interfaces.TaskManager;
-import com.practicum.yandex.repositories.FileBackedTaskManager;
+import com.practicum.yandex.managers.FileBackedTaskManager;
 import com.practicum.yandex.services.Managers;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;

@@ -25,8 +25,7 @@ public class MainFunctionalityTest {
     }
 
     @Test
-    public void shouldWorksFullEpicFunctionality() {
-
+    public void checkWorksCorrectEpicTaskBoundaryConditions() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
                         TasksDescriptionForTests.epicPinguinProject.name(),
@@ -136,5 +135,82 @@ public class MainFunctionalityTest {
         Assertions.assertEquals(
                 taskManager.getEpicTaskByUUID(epicTask.getUUID()).getTaskStatus(),
                 TaskStatus.IN_PROGRESS);
+    }
+
+    @Test
+    public void checkWorksCorrectHistoryManagerBoundaryConditions() {
+        UUID epicTaskUUID = UUID.randomUUID();
+        UUID subTaskUUID = UUID.randomUUID();
+        UUID taskUUID = UUID.randomUUID();
+
+        Task task =
+                taskManager.createTask(
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
+                        taskUUID,
+                        TaskStatus.NEW,
+                        TasksDescriptionForTests.taskRefactoringCode.localDateTime(),
+                        TasksDescriptionForTests.taskRefactoringCode.duration());
+
+        EpicTask epicTask =
+                taskManager.createEpicTask(
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
+                        epicTaskUUID);
+
+        SubTask subTask =
+                taskManager.createSubTask(
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
+                        subTaskUUID,
+                        TaskStatus.NEW,
+                        epicTask.getUUID());
+
+        taskManager.addNewTask(task);
+        taskManager.addNewEpicTask(epicTask);
+        taskManager.addNewSubTask(subTask);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 0);
+
+        taskManager.getTaskByUUID(taskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 1);
+
+        taskManager.getTaskByUUID(task.getUUID());
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 1);
+
+        taskManager.getSubTaskByUUID(subTaskUUID);
+        taskManager.getSubTaskByUUID(taskUUID);
+        taskManager.getSubTaskByUUID(taskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 2);
+
+        taskManager.getEpicTaskByUUID(epicTaskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 3);
+
+        taskManager.deleteTaskByUUID(taskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 2);
+
+        taskManager.addNewTask(task);
+        taskManager.getTaskByUUID(taskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 3);
+
+        taskManager.deleteTaskByUUID(taskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 2);
+
+        taskManager.addNewTask(task);
+        taskManager.getTaskByUUID(taskUUID);
+        taskManager.deleteSubTaskByUUID(subTaskUUID);
+
+        Assertions.assertEquals(taskManager.getHistory().size(), 2);
+    }
+
+    abstract class TaskManagerTest<T extends TaskManager> {
+
     }
 }

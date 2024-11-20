@@ -2,9 +2,9 @@ package com.practicum.yandex.services;
 
 import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.interfaces.TaskManager;
-import com.practicum.yandex.repositories.FileBackedTaskManager;
-import com.practicum.yandex.repositories.InMemoryHistoryManager;
-import com.practicum.yandex.repositories.InMemoryTaskManager;
+import com.practicum.yandex.managers.FileBackedTaskManager;
+import com.practicum.yandex.managers.InMemoryHistoryManager;
+import com.practicum.yandex.managers.InMemoryTaskManager;
 
 public class Managers {
 

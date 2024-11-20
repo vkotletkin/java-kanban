@@ -1,4 +1,4 @@
-package com.practicum.yandex.repositories;
+package com.practicum.yandex.managers;
 
 import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.interfaces.TaskManager;
@@ -137,6 +137,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllTasks() {
         for (UUID uuid : tasks.keySet()) {
             historyManager.remove(uuid);
+            prioritizedTasks.remove(tasks.get(uuid));
         }
         tasks.clear();
     }
@@ -145,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllSubTasks() {
         for (UUID uuid : subtasks.keySet()) {
             historyManager.remove(uuid);
+            prioritizedTasks.remove(subtasks.get(uuid));
         }
         subtasks.clear();
         for (EpicTask epicTask : epicTasks.values()) {
@@ -166,6 +168,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (UUID uuid : subtasks.keySet()) {
             historyManager.remove(uuid);
+            prioritizedTasks.remove(subtasks.get(uuid));
         }
 
         epicTasks.clear();
@@ -251,9 +254,9 @@ public class InMemoryTaskManager implements TaskManager {
                         changedEpicTask.getDescription(),
                         changedEpicTask.getUUID(),
                         calculateEpicTaskStatus(changedEpicTask.getUUID()),
-                        timeMetrics.getStartDateTime(),
-                        timeMetrics.getEndDateTime(),
-                        timeMetrics.getDuration()));
+                        timeMetrics.startDateTime(),
+                        timeMetrics.endDateTime(),
+                        timeMetrics.duration()));
     }
 
     @Override
@@ -264,6 +267,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskByUUID(UUID uuid) {
         historyManager.remove(uuid);
+        prioritizedTasks.remove(tasks.get(uuid));
         tasks.remove(uuid);
     }
 
@@ -271,6 +275,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubTaskByUUID(UUID uuid) {
         UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
         historyManager.remove(uuid);
+        prioritizedTasks.remove(subtasks.get(uuid));
         subtasks.remove(uuid);
         updateEpicStatus(epicTaskUUID);
     }
@@ -360,17 +365,16 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    @Override
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;
     }
 
     private boolean checkIntersectionOnIntervals(
             TimeMetrics firstTaskTimeMetrics, TimeMetrics secondTaskTimeMetrics) {
-        return !(firstTaskTimeMetrics
-                        .getEndDateTime()
-                        .isBefore(secondTaskTimeMetrics.getStartDateTime())
+        return !(firstTaskTimeMetrics.endDateTime().isBefore(secondTaskTimeMetrics.startDateTime())
                 || firstTaskTimeMetrics
-                        .getStartDateTime()
-                        .isAfter(secondTaskTimeMetrics.getEndDateTime()));
+                        .startDateTime()
+                        .isAfter(secondTaskTimeMetrics.endDateTime()));
     }
 }

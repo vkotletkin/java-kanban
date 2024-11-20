@@ -1,4 +1,4 @@
-package com.practicum.yandex.repositories;
+package com.practicum.yandex.managers;
 
 import static com.practicum.yandex.utils.DataFormats.DATE_FORMAT;
 
