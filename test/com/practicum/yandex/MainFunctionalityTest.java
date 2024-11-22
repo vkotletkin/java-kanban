@@ -209,6 +209,4 @@ public class MainFunctionalityTest {
 
         Assertions.assertEquals(taskManager.getHistory().size(), 2);
     }
-
-    abstract class TaskManagerTest<T extends TaskManager> {}
 }
