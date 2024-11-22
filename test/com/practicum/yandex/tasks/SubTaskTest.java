@@ -29,14 +29,14 @@ public class SubTaskTest {
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
                         uuid);
 
         SubTask subTask =
                 taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         uuid,
                         TaskStatus.NEW,
                         epicTask.getUUID());
@@ -46,8 +46,8 @@ public class SubTaskTest {
                         "SubTask{name='%s', "
                                 + "description='%s',"
                                 + " uuid=%s, taskStatus=NEW, epicTaskUUID=%s}",
-                        TasksDescriptionForTests.subTaskRequestsAPI.getName(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.getDescription(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
+                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
                         uuid,
                         uuid),
                 subTask.toString());

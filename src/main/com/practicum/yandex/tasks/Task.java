@@ -1,7 +1,10 @@
 package com.practicum.yandex.tasks;
 
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.TimeMetrics;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,6 +14,8 @@ public class Task {
     private final String description;
     private final UUID uuid;
     private final TaskStatus taskStatus;
+    private final LocalDateTime startTime;
+    private final Duration duration;
 
     @Override
     public String toString() {
@@ -28,18 +33,51 @@ public class Task {
                 + '}';
     }
 
-    public Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
-        this.name = name;
-        this.description = description;
-        this.uuid = uuid;
-        this.taskStatus = taskStatus;
-    }
-
     public Task(String name, String description, TaskStatus taskStatus) {
         this.name = name;
         this.description = description;
         this.uuid = UUID.randomUUID();
         this.taskStatus = taskStatus;
+        this.startTime = LocalDateTime.now();
+        this.duration = Duration.ofSeconds(0);
+    }
+
+    public Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
+        this.name = name;
+        this.description = description;
+        this.uuid = uuid;
+        this.taskStatus = taskStatus;
+        this.startTime = LocalDateTime.now();
+        this.duration = Duration.ofSeconds(0);
+    }
+
+    public Task(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.uuid = UUID.randomUUID();
+        this.taskStatus = taskStatus;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
+    public Task(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.uuid = uuid;
+        this.taskStatus = taskStatus;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     @Override
@@ -64,5 +102,21 @@ public class Task {
 
     public TaskStatus getTaskStatus() {
         return taskStatus;
+    }
+
+    public TimeMetrics getTimeMetrics() {
+        return new TimeMetrics(getStartTime(), getEndTime(), getDuration());
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
     }
 }

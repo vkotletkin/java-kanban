@@ -28,15 +28,15 @@ public class EpicTaskTest {
 
         EpicTask epicTask =
                 taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescriptionForTests.epicPinguinProject.getDescription(),
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescriptionForTests.epicPinguinProject.description(),
                         uuid);
 
         Assertions.assertEquals(
                 String.format(
                         "EpicTask{name='%s', " + "description='%s'," + " uuid=%s, taskStatus=NEW}",
-                        TasksDescriptionForTests.epicPinguinProject.getName(),
-                        TasksDescription.epicPinguinProject.getDescription(),
+                        TasksDescriptionForTests.epicPinguinProject.name(),
+                        TasksDescription.epicPinguinProject.description(),
                         uuid),
                 epicTask.toString());
     }

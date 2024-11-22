@@ -1,19 +1,7 @@
 package com.practicum.yandex.utils;
 
-public class TaskConstruct {
-    private final String name;
-    private final String description;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
-    public TaskConstruct(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-}
+public record TaskConstruct(
+        String name, String description, LocalDateTime localDateTime, Duration duration) {}

@@ -1,4 +1,4 @@
-package com.practicum.yandex.repositories;
+package com.practicum.yandex.managers;
 
 import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.tasks.Task;
@@ -39,7 +39,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             prev.setNext(null);
             tail = prev;
         } else if (prev == null && next == null) {
-            node = null;
             return;
         } else if (prev != null && next != null) {
             prev.setNext(next);

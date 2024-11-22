@@ -1,10 +1,10 @@
-package test.com.practicum.yandex.repositories;
+package test.com.practicum.yandex.managers;
 
 import static test.com.practicum.yandex.utils.FileBackedDescriptionForTests.fileForManagerData;
 
 import com.practicum.yandex.exceptions.ManagerSaveException;
 import com.practicum.yandex.interfaces.TaskManager;
-import com.practicum.yandex.repositories.FileBackedTaskManager;
+import com.practicum.yandex.managers.FileBackedTaskManager;
 import com.practicum.yandex.services.Managers;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
@@ -47,8 +47,8 @@ public class FileBackedTaskManagerTest {
         TaskManager taskManager = Managers.getFileBackedTaskManager();
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
@@ -73,17 +73,21 @@ public class FileBackedTaskManagerTest {
 
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRefactoringCode.localDateTime(),
+                        TasksDescription.taskRefactoringCode.duration());
 
         Task taskSecond =
                 taskManager.createTask(
-                        TasksDescription.taskRoomClearing.getName(),
-                        TasksDescription.taskRoomClearing.getDescription(),
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration());
 
         taskManager.addNewTask(taskFirst);
         taskManager.addNewTask(taskSecond);
@@ -92,22 +96,26 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    public void shouldLoadFewTasks() {
+    public void shouldLoadOneTasks() {
         TaskManager taskManager = Managers.getFileBackedTaskManager(file.getPath());
 
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRefactoringCode.localDateTime(),
+                        TasksDescription.taskRefactoringCode.duration());
 
         Task taskSecond =
                 taskManager.createTask(
-                        TasksDescription.taskRoomClearing.getName(),
-                        TasksDescription.taskRoomClearing.getDescription(),
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
-                        TaskStatus.NEW);
+                        TaskStatus.NEW,
+                        TasksDescription.taskRoomClearing.localDateTime(),
+                        TasksDescription.taskRoomClearing.duration());
 
         taskManager.addNewTask(taskFirst);
         taskManager.addNewTask(taskSecond);

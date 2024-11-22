@@ -1,4 +1,4 @@
-package com.practicum.yandex.repositories;
+package com.practicum.yandex.managers;
 
 import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.interfaces.TaskManager;
@@ -7,7 +7,10 @@ import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;
 import com.practicum.yandex.tasks.statuses.TaskStatus;
+import com.practicum.yandex.utils.TimeMetrics;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -17,11 +20,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager;
 
+    private final Set<Task> prioritizedTasks;
+
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epicTasks = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+        prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
     }
 
     @Override
@@ -32,6 +38,27 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task createTask(String name, String description, TaskStatus taskStatus) {
         return new Task(name, description, taskStatus);
+    }
+
+    @Override
+    public Task createTask(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new Task(name, description, uuid, taskStatus, startTime, duration);
+    }
+
+    @Override
+    public Task createTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new Task(name, description, taskStatus, startTime, duration);
     }
 
     @Override
@@ -47,6 +74,29 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public SubTask createSubTask(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            UUID epicTaskUUID,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new SubTask(name, description, uuid, taskStatus, epicTaskUUID, startTime, duration);
+    }
+
+    @Override
+    public SubTask createSubTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            UUID epicTaskUUID,
+            LocalDateTime startTime,
+            Duration duration) {
+        return new SubTask(name, description, taskStatus, epicTaskUUID, startTime, duration);
+    }
+
+    @Override
     public EpicTask createEpicTask(String name, String description, UUID uuid) {
         return new EpicTask(name, description, uuid);
     }
@@ -54,6 +104,18 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public EpicTask createEpicTask(String name, String description) {
         return new EpicTask(name, description);
+    }
+
+    @Override
+    public EpicTask createEpicTask(
+            String name,
+            String description,
+            UUID uuid,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Duration duration) {
+        return new EpicTask(name, description, uuid, taskStatus, startTime, endTime, duration);
     }
 
     @Override
@@ -75,6 +137,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllTasks() {
         for (UUID uuid : tasks.keySet()) {
             historyManager.remove(uuid);
+            prioritizedTasks.remove(tasks.get(uuid));
         }
         tasks.clear();
     }
@@ -83,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllSubTasks() {
         for (UUID uuid : subtasks.keySet()) {
             historyManager.remove(uuid);
+            prioritizedTasks.remove(subtasks.get(uuid));
         }
         subtasks.clear();
         for (EpicTask epicTask : epicTasks.values()) {
@@ -104,6 +168,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (UUID uuid : subtasks.keySet()) {
             historyManager.remove(uuid);
+            prioritizedTasks.remove(subtasks.get(uuid));
         }
 
         epicTasks.clear();
@@ -130,13 +195,37 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addNewTask(Task task) {
+        if (isIntervalsIntersection(task)) {
+            System.out.println(
+                    "Время начала задачи пересекается с существующей. Добавление отклонено.");
+            return;
+        }
         tasks.put(task.getUUID(), task);
+        prioritizedTasks.add(task);
+    }
+
+    private boolean isIntervalsIntersection(Task task) {
+        List<Boolean> intervalsCheckResult =
+                prioritizedTasks.stream()
+                        .map(
+                                streamTask ->
+                                        checkIntersectionOnIntervals(
+                                                streamTask.getTimeMetrics(), task.getTimeMetrics()))
+                        .toList();
+
+        return intervalsCheckResult.contains(true);
     }
 
     @Override
     public void addNewSubTask(SubTask subtask) {
+        if (isIntervalsIntersection(subtask)) {
+            System.out.println(
+                    "Время начала задачи пересекается с существующей. Добавление отклонено.");
+            return;
+        }
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
+        prioritizedTasks.add(subtask);
     }
 
     @Override
@@ -157,15 +246,20 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void updateEpicStatus(UUID uuid) {
         EpicTask changedEpicTask = epicTasks.get(uuid);
+        TimeMetrics timeMetrics = calculateEpicTimeMetrics(uuid);
         epicTasks.put(
                 uuid,
                 new EpicTask(
                         changedEpicTask.getName(),
                         changedEpicTask.getDescription(),
                         changedEpicTask.getUUID(),
-                        calculateEpicTaskStatus(changedEpicTask.getUUID())));
+                        calculateEpicTaskStatus(changedEpicTask.getUUID()),
+                        timeMetrics.startDateTime(),
+                        timeMetrics.endDateTime(),
+                        timeMetrics.duration()));
     }
 
+    @Override
     public void updateEpicTask(EpicTask epicTask) {
         epicTasks.put(epicTask.getUUID(), epicTask);
     }
@@ -173,6 +267,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskByUUID(UUID uuid) {
         historyManager.remove(uuid);
+        prioritizedTasks.remove(tasks.get(uuid));
         tasks.remove(uuid);
     }
 
@@ -180,6 +275,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubTaskByUUID(UUID uuid) {
         UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
         historyManager.remove(uuid);
+        prioritizedTasks.remove(subtasks.get(uuid));
         subtasks.remove(uuid);
         updateEpicStatus(epicTaskUUID);
     }
@@ -188,12 +284,12 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicTaskByUUID(UUID uuid) {
         epicTasks.remove(uuid);
         historyManager.remove(uuid);
-        List<UUID> uuidsToDelete = new ArrayList<>();
-        for (Map.Entry<UUID, SubTask> subTask : subtasks.entrySet()) {
-            if (subTask.getValue().getEpicTaskUUID().equals(uuid)) {
-                uuidsToDelete.add(subTask.getValue().getUUID());
-            }
-        }
+        List<UUID> uuidsToDelete =
+                subtasks.values().stream()
+                        .filter(subTask -> subTask.getEpicTaskUUID().equals(uuid))
+                        .map(Task::getUUID)
+                        .toList();
+
         for (UUID uuidToDelete : uuidsToDelete) {
             subtasks.remove(uuidToDelete);
             historyManager.remove(uuidToDelete);
@@ -202,13 +298,42 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<SubTask> getEpicSubTasks(UUID epicUUID) {
-        List<SubTask> epicSubtasks = new ArrayList<>();
+        return subtasks.values().stream()
+                .filter(subTask -> subTask.getEpicTaskUUID().equals(epicUUID))
+                .toList();
+    }
+
+    private TimeMetrics calculateEpicTimeMetrics(UUID uuid) {
+        List<LocalDateTime> startDateTimes = new ArrayList<>();
+        List<Duration> subtasksDurations = new ArrayList<>();
+
         for (SubTask subtask : subtasks.values()) {
-            if (subtask.getEpicTaskUUID().equals(epicUUID)) {
-                epicSubtasks.add(subtask);
+            if (subtask.getEpicTaskUUID().equals(uuid)) {
+                startDateTimes.add(subtask.getStartTime());
+                subtasksDurations.add(subtask.getDuration());
             }
         }
-        return epicSubtasks;
+
+        Optional<LocalDateTime> earlierStartDateTime = Optional.empty();
+        Optional<LocalDateTime> lastStartDateTime = Optional.empty();
+
+        if (startDateTimes.size() != 0) {
+            startDateTimes.sort(LocalDateTime::compareTo);
+            earlierStartDateTime = Optional.ofNullable(startDateTimes.get(0));
+            lastStartDateTime = Optional.ofNullable(startDateTimes.get(startDateTimes.size() - 1));
+        }
+
+        Duration sumOfDurations = Duration.ofSeconds(0);
+
+        for (Duration duration : subtasksDurations) {
+            sumOfDurations = sumOfDurations.plus(duration);
+        }
+
+        if (earlierStartDateTime.isPresent() && lastStartDateTime.isPresent()) {
+            return new TimeMetrics(
+                    earlierStartDateTime.get(), lastStartDateTime.get(), sumOfDurations);
+        }
+        return new TimeMetrics(null, null, sumOfDurations);
     }
 
     private TaskStatus calculateEpicTaskStatus(UUID uuid) {
@@ -238,5 +363,18 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public Set<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+    }
+
+    private boolean checkIntersectionOnIntervals(
+            TimeMetrics firstTaskTimeMetrics, TimeMetrics secondTaskTimeMetrics) {
+        return !(firstTaskTimeMetrics.endDateTime().isBefore(secondTaskTimeMetrics.startDateTime())
+                || firstTaskTimeMetrics
+                        .startDateTime()
+                        .isAfter(secondTaskTimeMetrics.endDateTime()));
     }
 }

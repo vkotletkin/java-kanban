@@ -98,16 +98,16 @@ class TaskTest {
 
         Task taskFirst =
                 taskManager.createTask(
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescriptionForTests.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescriptionForTests.taskRefactoringCode.description(),
                         uuid,
                         TaskStatus.NEW);
 
         Assertions.assertEquals(
                 String.format(
                         "Task{name='%s', description='%s', uuid=%s, taskStatus=NEW}",
-                        TasksDescriptionForTests.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getDescription(),
+                        TasksDescriptionForTests.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.description(),
                         uuid),
                 taskFirst.toString());
     }

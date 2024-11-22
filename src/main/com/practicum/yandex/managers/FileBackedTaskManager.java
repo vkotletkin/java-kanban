@@ -1,4 +1,6 @@
-package com.practicum.yandex.repositories;
+package com.practicum.yandex.managers;
+
+import static com.practicum.yandex.utils.DataFormats.DATE_FORMAT;
 
 import com.practicum.yandex.exceptions.ManagerSaveException;
 import com.practicum.yandex.interfaces.TaskManager;
@@ -11,6 +13,8 @@ import com.practicum.yandex.tasks.types.Tasks;
 import com.practicum.yandex.utils.TasksDescription;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -45,7 +49,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                                     csvLineData[2],
                                     csvLineData[4],
                                     UUID.fromString(csvLineData[0]),
-                                    TaskStatus.valueOf(csvLineData[3])));
+                                    TaskStatus.valueOf(csvLineData[3]),
+                                    LocalDateTime.parse(csvLineData[6], DATE_FORMAT),
+                                    Duration.parse(csvLineData[8])));
                 } else if (Tasks.valueOf(csvLineData[1]) == Tasks.SUBTASK) {
                     fileBackedTaskManager.addNewSubTask(
                             new SubTask(
@@ -53,14 +59,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                                     csvLineData[4],
                                     UUID.fromString(csvLineData[0]),
                                     TaskStatus.valueOf(csvLineData[3]),
-                                    UUID.fromString(csvLineData[5])));
+                                    UUID.fromString(csvLineData[5]),
+                                    LocalDateTime.parse(csvLineData[6], DATE_FORMAT),
+                                    Duration.parse(csvLineData[8])));
                 } else if (Tasks.valueOf(csvLineData[1]) == Tasks.EPICTASK) {
                     fileBackedTaskManager.addNewEpicTask(
                             new EpicTask(
                                     csvLineData[2],
                                     csvLineData[4],
                                     UUID.fromString(csvLineData[0]),
-                                    TaskStatus.valueOf(csvLineData[3])));
+                                    TaskStatus.valueOf(csvLineData[3]),
+                                    LocalDateTime.parse(csvLineData[6], DATE_FORMAT),
+                                    LocalDateTime.parse(csvLineData[7], DATE_FORMAT),
+                                    Duration.parse(csvLineData[8])));
                 }
             }
             return fileBackedTaskManager;
@@ -71,7 +82,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (FileWriter fileWriter = new FileWriter(pathToFileSave)) {
-            String csvHeader = String.format("id,type,name,status,description,epic%n");
+            String csvHeader =
+                    String.format(
+                            "id,type,name,status,description,epic,start_time,end_time,duration%n");
             fileWriter.write(csvHeader);
 
             for (Task task : super.getTasks()) {
@@ -93,35 +106,44 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String convertTaskToString(Task task) {
         return String.format(
-                "%s,%s,%s,%s,%s,%s%n",
+                "%s,%s,%s,%s,%s,%s,%s,%s,%s%n",
                 task.getUUID(),
                 Tasks.TASK,
                 task.getName(),
                 task.getTaskStatus(),
                 task.getDescription(),
-                "");
+                "",
+                task.getStartTime().format(DATE_FORMAT),
+                task.getEndTime().format(DATE_FORMAT),
+                task.getDuration());
     }
 
     private String convertSubTaskToString(SubTask task) {
         return String.format(
-                "%s,%s,%s,%s,%s,%s%n",
+                "%s,%s,%s,%s,%s,%s,%s,%s,%s%n",
                 task.getUUID(),
                 Tasks.SUBTASK,
                 task.getName(),
                 task.getTaskStatus(),
                 task.getDescription(),
-                task.getEpicTaskUUID());
+                task.getEpicTaskUUID(),
+                task.getStartTime().format(DATE_FORMAT),
+                task.getEndTime().format(DATE_FORMAT),
+                task.getDuration());
     }
 
     private String convertEpicTaskToString(EpicTask task) {
         return String.format(
-                "%s,%s,%s,%s,%s,%s%n",
+                "%s,%s,%s,%s,%s,%s,%s,%s,%s%n",
                 task.getUUID(),
                 Tasks.EPICTASK,
                 task.getName(),
                 task.getTaskStatus(),
                 task.getDescription(),
-                "");
+                "",
+                task.getStartTime().format(DATE_FORMAT),
+                task.getEndTime().format(DATE_FORMAT),
+                task.getDuration());
     }
 
     @Override
@@ -186,52 +208,52 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         Task taskFirst =
                 fileBackedTaskManagerFirst.createTask(
-                        TasksDescription.taskRefactoringCode.getName(),
-                        TasksDescription.taskRefactoringCode.getName(),
+                        TasksDescription.taskRefactoringCode.name(),
+                        TasksDescription.taskRefactoringCode.name(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         Task taskSecond =
                 fileBackedTaskManagerFirst.createTask(
-                        TasksDescription.taskRoomClearing.getName(),
-                        TasksDescription.taskRoomClearing.getDescription(),
+                        TasksDescription.taskRoomClearing.name(),
+                        TasksDescription.taskRoomClearing.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW);
 
         EpicTask epicTaskFirst =
                 fileBackedTaskManagerFirst.createEpicTask(
-                        TasksDescription.epicPinguinProject.getName(),
-                        TasksDescription.epicPinguinProject.getDescription(),
+                        TasksDescription.epicPinguinProject.name(),
+                        TasksDescription.epicPinguinProject.description(),
                         UUID.randomUUID());
 
         SubTask subTaskFirst =
                 fileBackedTaskManagerFirst.createSubTask(
-                        TasksDescription.subTaskRequestsAPI.getName(),
-                        TasksDescription.subTaskRequestsAPI.getDescription(),
+                        TasksDescription.subTaskRequestsAPI.name(),
+                        TasksDescription.subTaskRequestsAPI.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         SubTask subTaskSecond =
                 fileBackedTaskManagerFirst.createSubTask(
-                        TasksDescription.subTaskServiceTesting.getName(),
-                        TasksDescription.subTaskServiceTesting.getDescription(),
+                        TasksDescription.subTaskServiceTesting.name(),
+                        TasksDescription.subTaskServiceTesting.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         SubTask subTaskThird =
                 fileBackedTaskManagerFirst.createSubTask(
-                        TasksDescription.subTaskDocumentationWriting.getName(),
-                        TasksDescription.subTaskDocumentationWriting.getDescription(),
+                        TasksDescription.subTaskDocumentationWriting.name(),
+                        TasksDescription.subTaskDocumentationWriting.description(),
                         UUID.randomUUID(),
                         TaskStatus.NEW,
                         epicTaskFirst.getUUID());
 
         EpicTask epicTaskElasticKibana =
                 fileBackedTaskManagerFirst.createEpicTask(
-                        TasksDescription.epicELKStack.getName(),
-                        TasksDescription.epicELKStack.getDescription(),
+                        TasksDescription.epicELKStack.name(),
+                        TasksDescription.epicELKStack.description(),
                         UUID.randomUUID());
 
         fileBackedTaskManagerFirst.addNewTask(taskFirst);
