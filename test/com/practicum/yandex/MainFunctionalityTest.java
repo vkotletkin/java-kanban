@@ -138,7 +138,7 @@ public class MainFunctionalityTest {
     }
 
     @Test
-    public void checkWorksCorrectHistoryManagerBoundaryConditions() {
+    public void checkWorksCorrectBoundaryConditions() {
         UUID epicTaskUUID = UUID.randomUUID();
         UUID subTaskUUID = UUID.randomUUID();
         UUID taskUUID = UUID.randomUUID();
@@ -210,7 +210,5 @@ public class MainFunctionalityTest {
         Assertions.assertEquals(taskManager.getHistory().size(), 2);
     }
 
-    abstract class TaskManagerTest<T extends TaskManager> {
-
-    }
+    abstract class TaskManagerTest<T extends TaskManager> {}
 }
