@@ -1,5 +1,6 @@
 package com.practicum.yandex.interfaces;
 
+import com.practicum.yandex.exceptions.NotFoundException;
 import com.practicum.yandex.tasks.EpicTask;
 import com.practicum.yandex.tasks.SubTask;
 import com.practicum.yandex.tasks.Task;

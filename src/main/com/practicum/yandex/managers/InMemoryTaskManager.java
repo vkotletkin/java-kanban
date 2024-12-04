@@ -1,5 +1,7 @@
 package com.practicum.yandex.managers;
 
+import com.practicum.yandex.exceptions.NotFoundException;
+import com.practicum.yandex.exceptions.TimeIntersectionException;
 import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
@@ -177,8 +179,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskByUUID(UUID uuid) {
-        historyManager.add(tasks.get(uuid));
-        return tasks.get(uuid);
+        Task task = tasks.get(uuid);
+        historyManager.add(task);
+        return task;
     }
 
     @Override
@@ -219,9 +222,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addNewSubTask(SubTask subtask) {
         if (isIntervalsIntersection(subtask)) {
-            System.out.println(
+            throw new TimeIntersectionException(
                     "Время начала задачи пересекается с существующей. Добавление отклонено.");
-            return;
         }
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
