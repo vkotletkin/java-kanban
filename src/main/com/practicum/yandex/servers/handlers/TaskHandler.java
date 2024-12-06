@@ -43,7 +43,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         Optional<Task> task = Optional.ofNullable(taskManager.getTaskByUUID(taskUUID));
 
         if (task.isPresent()) {
-            this.sendText(httpExchange, gson.toJson(task.get().toString()), 200);
+            this.sendText(httpExchange, gson.toJson(task.get()), 200);
         } else {
             this.sendNotFound(httpExchange);
         }
@@ -119,10 +119,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             return TaskEndpoint.POST_TASK;
         } else if (requestPath.contains("/tasks/") && requestMethod.equals("DELETE")) {
             return TaskEndpoint.DELETE;
-        } else if (requestPath.equals("/history")) {
-            return TaskEndpoint.HISTORY;
-        } else if (requestPath.equals("/prioritized")) {
-            return TaskEndpoint.PRIORITIZED;
         }
 
         return TaskEndpoint.UNKNOWN;
@@ -133,8 +129,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         GET_CERTAIN_TASK,
         POST_TASK,
         DELETE,
-        HISTORY,
-        PRIORITIZED,
+
         UNKNOWN
     }
 }
