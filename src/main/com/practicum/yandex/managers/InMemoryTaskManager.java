@@ -199,9 +199,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addNewTask(Task task) {
         if (isIntervalsIntersection(task)) {
-            System.out.println(
-                    "Время начала задачи пересекается с существующей. Добавление отклонено.");
-            return;
+            throw new TimeIntersectionException("Произошло пересечение по времени");
         }
         tasks.put(task.getUUID(), task);
         prioritizedTasks.add(task);
@@ -268,9 +266,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskByUUID(UUID uuid) {
-        historyManager.remove(uuid);
-        prioritizedTasks.remove(tasks.get(uuid));
-        tasks.remove(uuid);
+        if (tasks.containsKey(uuid)) {
+            historyManager.remove(uuid);
+            prioritizedTasks.remove(tasks.get(uuid));
+            tasks.remove(uuid);
+        } else {
+            throw new NotFoundException("Объекта Task с таким UUID не существует");
+        }
     }
 
     @Override

@@ -1,11 +1,10 @@
 package com.practicum.yandex.servers.handlers;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import com.practicum.yandex.exceptions.NotFoundException;
+import com.practicum.yandex.exceptions.TimeIntersectionException;
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.tasks.Task;
-import com.practicum.yandex.tasks.statuses.TaskStatus;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -16,69 +15,114 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
+
     public TaskHandler(TaskManager taskManager) {
         super(taskManager);
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
+
         String method = httpExchange.getRequestMethod();
         TaskEndpoint endpoint = getEndpoint(httpExchange.getRequestURI().getPath(), method);
         switch (endpoint) {
-            case GET_ALL_TASKS -> sendText(httpExchange, taskManager.getTasks().toString(), 200);
+            case GET_ALL_TASKS ->
+                    sendText(httpExchange, gson.toJson(taskManager.getTasks().toString()), 200);
             case GET_CERTAIN_TASK -> handleGetCertainTask(httpExchange);
             case POST_TASK -> handlePostTask(httpExchange);
+            case DELETE -> handleDeleteTask(httpExchange);
         }
     }
 
     public void handleGetCertainTask(HttpExchange httpExchange) throws IOException {
         String path = httpExchange.getRequestURI().getPath();
-        String[] pathElements = path.split("/");
+        String[] splitPath = splitPath(path);
 
-        UUID taskUUID = UUID.fromString(pathElements[2]);
+        UUID taskUUID = UUID.fromString(splitPath[2]);
 
         Optional<Task> task = Optional.ofNullable(taskManager.getTaskByUUID(taskUUID));
 
         if (task.isPresent()) {
-            this.sendText(httpExchange, task.toString(), 200);
+            this.sendText(httpExchange, gson.toJson(task.get().toString()), 200);
         } else {
-            this.sendNotFound(httpExchange, 404);
+            this.sendNotFound(httpExchange);
         }
     }
 
     public void handlePostTask(HttpExchange httpExchange) throws IOException {
-        String path = httpExchange.getRequestURI().getPath();
-        String[] pathElements = path.split("/");
         InputStream inputStream = httpExchange.getRequestBody();
 
-        String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        try {
+            String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
-        JsonElement jsonElement = JsonParser.parseString(body);
+            Task task = gson.fromJson(body, Task.class);
 
-        if (jsonElement.isJsonObject()) {
+            if (task.getUUID() == null) {
+                Task taskToAdd =
+                        taskManager.createTask(
+                                task.getName(),
+                                task.getDescription(),
+                                task.getTaskStatus(),
+                                task.getStartTime(),
+                                task.getDuration());
+                taskManager.addNewTask(taskToAdd);
 
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            String name = jsonObject.get("name").getAsString();
-            String description = jsonObject.get("description").getAsString();
-            TaskStatus taskStatus = TaskStatus.valueOf(jsonObject.get("task_status").getAsString());
-
-
-            if (pathElements.length == 2) {
-                taskManager.addNewTask(taskManager.createTask(name, description, taskStatus));
+                this.sendText(
+                        httpExchange,
+                        String.format(
+                                "{\"response\": \"Объект был создан с UUID: %s\"}",
+                                taskToAdd.getUUID()),
+                        201);
+            } else {
+                taskManager.updateTask(task);
+                this.sendText(
+                        httpExchange,
+                        String.format(
+                                "{\"response\": \"Объект с UUID: %s был обновлен\"}",
+                                task.getUUID()),
+                        201);
             }
-            UUID taskUUID = UUID.fromString(pathElements[3]);
+
+        } catch (TimeIntersectionException e) {
+            this.sendHasInteractions(httpExchange);
         }
     }
 
-    private TaskEndpoint getEndpoint(String requestPath, String requestMethod) {
-        String[] pathParts = requestPath.split("/");
+    public void handleDeleteTask(HttpExchange httpExchange) throws IOException {
+        try {
+            String path = httpExchange.getRequestURI().getPath();
+            String[] splitPath = splitPath(path);
+            UUID taskUUID = UUID.fromString(splitPath[2]);
 
-        if (pathParts.length == 2 && requestMethod.equals("GET")) {
+            taskManager.deleteTaskByUUID(taskUUID);
+            this.sendText(
+                    httpExchange,
+                    String.format(
+                            "{\"response\": \"Объект Task с UUID: %s успешно удален!\"}", taskUUID),
+                    201);
+        } catch (NotFoundException e) {
+            this.sendNotFound(httpExchange);
+        }
+    }
+
+    private String[] splitPath(String path) {
+        return path.split("/");
+    }
+
+    private TaskEndpoint getEndpoint(String requestPath, String requestMethod) {
+
+        if (requestPath.equals("/tasks") && requestMethod.equals("GET")) {
             return TaskEndpoint.GET_ALL_TASKS;
-        } else if (pathParts.length == 3 && requestMethod.equals("GET")) {
+        } else if (requestPath.contains("/tasks/") && requestMethod.equals("GET")) {
             return TaskEndpoint.GET_CERTAIN_TASK;
-        } else if (pathParts.length == 2 && requestMethod.equals("POST")) {
+        } else if (requestPath.contains("/tasks") && requestMethod.equals("POST")) {
             return TaskEndpoint.POST_TASK;
+        } else if (requestPath.contains("/tasks/") && requestMethod.equals("DELETE")) {
+            return TaskEndpoint.DELETE;
+        } else if (requestPath.equals("/history")) {
+            return TaskEndpoint.HISTORY;
+        } else if (requestPath.equals("/prioritized")) {
+            return TaskEndpoint.PRIORITIZED;
         }
 
         return TaskEndpoint.UNKNOWN;
@@ -88,6 +132,9 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         GET_ALL_TASKS,
         GET_CERTAIN_TASK,
         POST_TASK,
+        DELETE,
+        HISTORY,
+        PRIORITIZED,
         UNKNOWN
     }
 }
