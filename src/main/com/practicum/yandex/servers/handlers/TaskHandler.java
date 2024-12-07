@@ -25,6 +25,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
         String method = httpExchange.getRequestMethod();
         TaskEndpoint endpoint = getEndpoint(httpExchange.getRequestURI().getPath(), method);
+
         switch (endpoint) {
             case GET_ALL_TASKS ->
                     sendText(httpExchange, gson.toJson(taskManager.getTasks().toString()), 200);
@@ -57,7 +58,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
             Task task = gson.fromJson(body, Task.class);
 
-            if (task.getUUID() == null) {
+            if (task.getUUID() == null || taskManager.getTaskByUUID(task.getUUID()) == null) {
                 Task taskToAdd =
                         taskManager.createTask(
                                 task.getName(),
@@ -105,23 +106,19 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    private String[] splitPath(String path) {
-        return path.split("/");
-    }
-
-    private TaskEndpoint getEndpoint(String requestPath, String requestMethod) {
+    protected TaskEndpoint getEndpoint(String requestPath, String requestMethod) {
 
         if (requestPath.equals("/tasks") && requestMethod.equals("GET")) {
-            return TaskEndpoint.GET_ALL_TASKS;
+            return TaskHandler.TaskEndpoint.GET_ALL_TASKS;
         } else if (requestPath.contains("/tasks/") && requestMethod.equals("GET")) {
-            return TaskEndpoint.GET_CERTAIN_TASK;
+            return TaskHandler.TaskEndpoint.GET_CERTAIN_TASK;
         } else if (requestPath.contains("/tasks") && requestMethod.equals("POST")) {
-            return TaskEndpoint.POST_TASK;
+            return TaskHandler.TaskEndpoint.POST_TASK;
         } else if (requestPath.contains("/tasks/") && requestMethod.equals("DELETE")) {
-            return TaskEndpoint.DELETE;
+            return TaskHandler.TaskEndpoint.DELETE;
         }
 
-        return TaskEndpoint.UNKNOWN;
+        return TaskHandler.TaskEndpoint.UNKNOWN;
     }
 
     enum TaskEndpoint {

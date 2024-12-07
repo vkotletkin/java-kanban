@@ -45,12 +45,15 @@ public class BaseHttpHandler {
 
     protected void sendHasInteractions(HttpExchange h) throws IOException {
         byte[] resp =
-                gson.toJson(
-                                "{\"response\": \"При создании или обновлении задачи произошло пересечение с другими задачами\"}")
+                "{\"response\": \"При создании или обновлении задачи произошло пересечение с другими задачами\"}"
                         .getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(406, resp.length);
         h.getResponseBody().write(resp);
         h.close();
+    }
+
+    protected String[] splitPath(String path) {
+        return path.split("/");
     }
 }

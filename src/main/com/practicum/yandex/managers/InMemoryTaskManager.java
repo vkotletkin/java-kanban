@@ -277,11 +277,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubTaskByUUID(UUID uuid) {
-        UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
-        historyManager.remove(uuid);
-        prioritizedTasks.remove(subtasks.get(uuid));
-        subtasks.remove(uuid);
-        updateEpicStatus(epicTaskUUID);
+        if (subtasks.containsKey(uuid)) {
+            UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
+            historyManager.remove(uuid);
+            prioritizedTasks.remove(subtasks.get(uuid));
+            subtasks.remove(uuid);
+            updateEpicStatus(epicTaskUUID);
+        } else {
+            throw new NotFoundException("Объекта Task с таким UUID не существует");
+        }
     }
 
     @Override
