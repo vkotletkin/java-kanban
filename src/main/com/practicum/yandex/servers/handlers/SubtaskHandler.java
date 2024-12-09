@@ -34,17 +34,22 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleGetCertainTask(HttpExchange httpExchange) throws IOException {
-        String path = httpExchange.getRequestURI().getPath();
-        String[] splitPath = splitPath(path);
+        try {
+            String path = httpExchange.getRequestURI().getPath();
+            String[] splitPath = splitPath(path);
 
-        UUID subtaskUUID = UUID.fromString(splitPath[2]);
+            UUID subtaskUUID = UUID.fromString(splitPath[2]);
 
-        Optional<SubTask> subTask = Optional.ofNullable(taskManager.getSubTaskByUUID(subtaskUUID));
+            Optional<SubTask> subTask =
+                    Optional.ofNullable(taskManager.getSubTaskByUUID(subtaskUUID));
 
-        if (subTask.isPresent()) {
-            this.sendText(httpExchange, gson.toJson(subTask.get()), 200);
-        } else {
-            this.sendNotFound(httpExchange);
+            if (subTask.isPresent()) {
+                this.sendText(httpExchange, gson.toJson(subTask.get()), 200);
+            } else {
+                this.sendNotFound(httpExchange);
+            }
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 
@@ -56,7 +61,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
 
             SubTask subtask = gson.fromJson(body, SubTask.class);
 
-            if (subtask.getUUID() == null) {
+            if (taskManager.getSubTaskByUUID(subtask.getUUID()) == null) {
                 SubTask subTaskToAdd =
                         taskManager.createSubTask(
                                 subtask.getName(),
@@ -85,6 +90,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
 
         } catch (TimeIntersectionException e) {
             this.sendHasInteractions(httpExchange);
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 
@@ -102,6 +109,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                     201);
         } catch (NotFoundException e) {
             this.sendNotFound(httpExchange);
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 

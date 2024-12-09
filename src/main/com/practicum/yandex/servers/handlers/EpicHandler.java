@@ -36,19 +36,23 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleGetEpicSubtasks(HttpExchange httpExchange) throws IOException {
-        String path = httpExchange.getRequestURI().getPath();
-        String[] splitPath = splitPath(path);
+        try {
+            String path = httpExchange.getRequestURI().getPath();
+            String[] splitPath = splitPath(path);
 
-        UUID epictaskUUID = UUID.fromString(splitPath[2]);
+            UUID epictaskUUID = UUID.fromString(splitPath[2]);
 
-        Optional<EpicTask> epictask =
-                Optional.ofNullable(taskManager.getEpicTaskByUUID(epictaskUUID));
+            Optional<EpicTask> epictask =
+                    Optional.ofNullable(taskManager.getEpicTaskByUUID(epictaskUUID));
 
-        if (epictask.isPresent()) {
-            this.sendText(
-                    httpExchange, gson.toJson(taskManager.getEpicSubTasks(epictaskUUID)), 200);
-        } else {
-            this.sendNotFound(httpExchange);
+            if (epictask.isPresent()) {
+                this.sendText(
+                        httpExchange, gson.toJson(taskManager.getEpicSubTasks(epictaskUUID)), 200);
+            } else {
+                this.sendNotFound(httpExchange);
+            }
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 
@@ -79,12 +83,12 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
             EpicTask epictask = gson.fromJson(body, EpicTask.class);
 
-            if (epictask.getUUID() == null
-                    || taskManager.getEpicTaskByUUID(epictask.getUUID()) == null) {
+            if (taskManager.getEpicTaskByUUID(epictask.getUUID()) == null) {
                 EpicTask epicTaskToAdd =
                         taskManager.createEpicTask(
                                 epictask.getName(),
                                 epictask.getDescription(),
+                                epictask.getUUID(),
                                 epictask.getTaskStatus(),
                                 epictask.getStartTime(),
                                 epictask.getEndTime(),
@@ -109,6 +113,8 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
         } catch (TimeIntersectionException e) {
             this.sendHasInteractions(httpExchange);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

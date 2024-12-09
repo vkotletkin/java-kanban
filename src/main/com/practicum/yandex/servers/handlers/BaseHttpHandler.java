@@ -53,6 +53,16 @@ public class BaseHttpHandler {
         h.close();
     }
 
+    protected void sendErrorResponse(HttpExchange h) throws IOException {
+        byte[] resp =
+                "{\"response\": \"При выполнении операции произошла внутренняя ошибка сервера.\"}"
+                        .getBytes(StandardCharsets.UTF_8);
+        h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        h.sendResponseHeaders(500, resp.length);
+        h.getResponseBody().write(resp);
+        h.close();
+    }
+
     protected String[] splitPath(String path) {
         return path.split("/");
     }

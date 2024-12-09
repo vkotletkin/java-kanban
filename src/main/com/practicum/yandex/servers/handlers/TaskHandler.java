@@ -36,17 +36,21 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     public void handleGetCertainTask(HttpExchange httpExchange) throws IOException {
-        String path = httpExchange.getRequestURI().getPath();
-        String[] splitPath = splitPath(path);
+        try {
+            String path = httpExchange.getRequestURI().getPath();
+            String[] splitPath = splitPath(path);
 
-        UUID taskUUID = UUID.fromString(splitPath[2]);
+            UUID taskUUID = UUID.fromString(splitPath[2]);
 
-        Optional<Task> task = Optional.ofNullable(taskManager.getTaskByUUID(taskUUID));
+            Optional<Task> task = Optional.ofNullable(taskManager.getTaskByUUID(taskUUID));
 
-        if (task.isPresent()) {
-            this.sendText(httpExchange, gson.toJson(task.get()), 200);
-        } else {
-            this.sendNotFound(httpExchange);
+            if (task.isPresent()) {
+                this.sendText(httpExchange, gson.toJson(task.get()), 200);
+            } else {
+                this.sendNotFound(httpExchange);
+            }
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 
@@ -86,6 +90,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
         } catch (TimeIntersectionException e) {
             this.sendHasInteractions(httpExchange);
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 
@@ -103,6 +109,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                     201);
         } catch (NotFoundException e) {
             this.sendNotFound(httpExchange);
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 

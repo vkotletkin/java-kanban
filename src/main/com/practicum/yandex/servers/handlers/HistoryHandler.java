@@ -14,10 +14,14 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String method = httpExchange.getRequestMethod();
+        try {
+            String method = httpExchange.getRequestMethod();
 
-        if (method.equals("GET")) {
-            sendText(httpExchange, gson.toJson(taskManager.getHistory()), 200);
+            if (method.equals("GET")) {
+                sendText(httpExchange, gson.toJson(taskManager.getHistory()), 200);
+            }
+        } catch (Exception e) {
+            this.sendErrorResponse(httpExchange);
         }
     }
 }
