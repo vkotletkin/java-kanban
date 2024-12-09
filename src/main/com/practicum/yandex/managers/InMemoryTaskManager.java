@@ -121,6 +121,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public EpicTask createEpicTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Duration duration) {
+        return new EpicTask(name, description, taskStatus, startTime, endTime, duration);
+    }
+
+    @Override
     public List<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }

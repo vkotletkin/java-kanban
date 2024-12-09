@@ -70,7 +70,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                 this.sendText(
                         httpExchange,
                         String.format(
-                                "{\"response\": \"Объект был создан с UUID: %s\"}",
+                                "{\"response\": \"Объект SubTask был создан с UUID: %s\"}",
                                 subTaskToAdd.getUUID()),
                         201);
             } else {

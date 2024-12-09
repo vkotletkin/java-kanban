@@ -68,6 +68,14 @@ public interface TaskManager {
             LocalDateTime endTime,
             Duration duration);
 
+    EpicTask createEpicTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Duration duration);
+
     List<Task> getTasks();
 
     List<SubTask> getSubTasks();
