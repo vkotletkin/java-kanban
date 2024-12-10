@@ -66,6 +66,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                         taskManager.createSubTask(
                                 subtask.getName(),
                                 subtask.getDescription(),
+                                subtask.getUUID(),
                                 subtask.getTaskStatus(),
                                 subtask.getEpicTaskUUID(),
                                 subtask.getStartTime(),

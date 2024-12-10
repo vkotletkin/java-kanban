@@ -62,11 +62,12 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
             Task task = gson.fromJson(body, Task.class);
 
-            if (task.getUUID() == null || taskManager.getTaskByUUID(task.getUUID()) == null) {
+            if (taskManager.getTaskByUUID(task.getUUID()) == null) {
                 Task taskToAdd =
                         taskManager.createTask(
                                 task.getName(),
                                 task.getDescription(),
+                                task.getUUID(),
                                 task.getTaskStatus(),
                                 task.getStartTime(),
                                 task.getDuration());
@@ -106,7 +107,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                     httpExchange,
                     String.format(
                             "{\"response\": \"Объект Task с UUID: %s успешно удален!\"}", taskUUID),
-                    201);
+                    200);
         } catch (NotFoundException e) {
             this.sendNotFound(httpExchange);
         } catch (Exception e) {

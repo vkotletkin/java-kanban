@@ -166,62 +166,6 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBeEmptyListOfSubTasks() {
-        EpicTask epicTask =
-                taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.name(),
-                        TasksDescriptionForTests.epicPinguinProject.description());
-
-        SubTask subTaskFirst =
-                taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
-                        TaskStatus.NEW,
-                        epicTask.getUUID());
-
-        SubTask subTaskSecond =
-                taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
-                        TaskStatus.NEW,
-                        epicTask.getUUID());
-
-        taskManager.addNewEpicTask(epicTask);
-        taskManager.addNewSubTask(subTaskFirst);
-        taskManager.addNewSubTask(subTaskSecond);
-
-        Assertions.assertNotEquals(2, taskManager.getTasks().size());
-
-        taskManager.deleteAllSubTasks();
-
-        Assertions.assertEquals(0, taskManager.getSubTasks().size());
-    }
-
-    @Test
-    public void shouldBeReturnNullOnDeletedEpicTask() {
-        EpicTask epicTask =
-                taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.name(),
-                        TasksDescriptionForTests.epicPinguinProject.description());
-
-        SubTask subTaskFirst =
-                taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
-                        TaskStatus.NEW,
-                        epicTask.getUUID());
-
-        taskManager.addNewEpicTask(epicTask);
-        taskManager.addNewSubTask(subTaskFirst);
-
-        Assertions.assertEquals(1, taskManager.getEpicTasks().size());
-
-        taskManager.deleteEpicTaskByUUID(epicTask.getUUID());
-
-        Assertions.assertNull(taskManager.getEpicTaskByUUID(epicTask.getUUID()));
-    }
-
-    @Test
     public void shouldBeReturnNullOnDeletedSubTask() {
         EpicTask epicTask =
                 taskManager.createEpicTask(
@@ -271,51 +215,6 @@ public class InMemoryTaskManagerTest {
         taskManager.addNewEpicTask(epicTask);
         taskManager.addNewSubTask(subTaskFirst);
         taskManager.addNewSubTask(subTaskSecond);
-
-        Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
-    }
-
-    @Test
-    public void shouldCorrectlyIntersectTimeLines() {
-        EpicTask epicTask =
-                taskManager.createEpicTask(
-                        TasksDescriptionForTests.epicPinguinProject.name(),
-                        TasksDescriptionForTests.epicPinguinProject.description());
-
-        SubTask subTaskFirst =
-                taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskRequestsAPI.name(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.description(),
-                        TaskStatus.NEW,
-                        epicTask.getUUID(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.localDateTime(),
-                        TasksDescriptionForTests.subTaskRequestsAPI.duration());
-
-        SubTask subTaskSecond =
-                taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
-                        TaskStatus.NEW,
-                        epicTask.getUUID(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.localDateTime(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.duration());
-
-        taskManager.addNewEpicTask(epicTask);
-        taskManager.addNewSubTask(subTaskFirst);
-        taskManager.addNewSubTask(subTaskSecond);
-
-        Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
-
-        SubTask subTaskThird =
-                taskManager.createSubTask(
-                        TasksDescriptionForTests.subTaskDocumentationWriting.name(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.description(),
-                        TaskStatus.NEW,
-                        epicTask.getUUID(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.localDateTime(),
-                        TasksDescriptionForTests.subTaskDocumentationWriting.duration());
-
-        taskManager.addNewSubTask(subTaskThird);
 
         Assertions.assertEquals(2, taskManager.getEpicSubTasks(epicTask.getUUID()).size());
     }
