@@ -37,6 +37,17 @@ public class EpicTask extends Task {
         this.endTime = endTime;
     }
 
+    public EpicTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Duration duration) {
+        super(name, description, taskStatus, startTime, duration);
+        this.endTime = endTime;
+    }
+
     @Override
     public String toString() {
         return "EpicTask{"

@@ -39,7 +39,7 @@ public class Task {
         this.uuid = UUID.randomUUID();
         this.taskStatus = taskStatus;
         this.startTime = LocalDateTime.now();
-        this.duration = Duration.ofSeconds(0);
+        this.duration = Duration.ZERO;
     }
 
     public Task(String name, String description, UUID uuid, TaskStatus taskStatus) {
@@ -48,7 +48,7 @@ public class Task {
         this.uuid = uuid;
         this.taskStatus = taskStatus;
         this.startTime = LocalDateTime.now();
-        this.duration = Duration.ofSeconds(0);
+        this.duration = Duration.ZERO;
     }
 
     public Task(
