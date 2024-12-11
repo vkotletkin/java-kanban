@@ -218,13 +218,13 @@ public class HttpTaskServerTest {
 
         List<Task> tasksFromManager = manager.getTasks();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager);
+        assertEquals(1, tasksFromManager.size());
+
         assertEquals(
                 TasksDescriptionForTests.taskRefactoringCode.name(),
                 tasksFromManager.get(0).getName(),
                 "Некорректное имя задачи");
-
 
         URI urlForGetCertainTask =
                 URI.create(String.format("http://localhost:8080/tasks/%s", task.getUUID()));
@@ -237,19 +237,16 @@ public class HttpTaskServerTest {
 
         assertEquals(200, responseGetCertainTask.statusCode());
 
-        URI urlGetHistory =
-                URI.create("http://localhost:8080/history");
+        URI urlGetHistory = URI.create("http://localhost:8080/history");
 
-        HttpRequest requestGetHistory =
-                HttpRequest.newBuilder().uri(urlGetHistory).GET().build();
+        HttpRequest requestGetHistory = HttpRequest.newBuilder().uri(urlGetHistory).GET().build();
 
         HttpResponse<String> responseGetHistory =
                 client.send(requestGetHistory, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, responseGetHistory.statusCode());
 
-        URI urlGetPrioritizedTasks =
-                URI.create("http://localhost:8080/prioritized");
+        URI urlGetPrioritizedTasks = URI.create("http://localhost:8080/prioritized");
 
         HttpRequest requestGetPrioritizedTasks =
                 HttpRequest.newBuilder().uri(urlGetPrioritizedTasks).GET().build();

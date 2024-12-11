@@ -282,7 +282,8 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.remove(tasks.get(uuid));
             tasks.remove(uuid);
         } else {
-            throw new NotFoundException("Объекта Task с таким UUID не существует");
+            throw new NotFoundException(
+                    String.format("Объекта Task с UUID: %s не существует", uuid));
         }
     }
 
@@ -295,7 +296,8 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.remove(uuid);
             updateEpicStatus(epicTaskUUID);
         } else {
-            throw new NotFoundException("Объекта Task с таким UUID не существует");
+            throw new NotFoundException(
+                    String.format("Объекта SubTask с UUID: %s не существует", uuid));
         }
     }
 
