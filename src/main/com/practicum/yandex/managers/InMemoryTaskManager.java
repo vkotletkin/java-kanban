@@ -1,5 +1,7 @@
 package com.practicum.yandex.managers;
 
+import com.practicum.yandex.exceptions.NotFoundException;
+import com.practicum.yandex.exceptions.TimeIntersectionException;
 import com.practicum.yandex.interfaces.HistoryManager;
 import com.practicum.yandex.interfaces.TaskManager;
 import com.practicum.yandex.services.Managers;
@@ -119,6 +121,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public EpicTask createEpicTask(
+            String name,
+            String description,
+            TaskStatus taskStatus,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Duration duration) {
+        return new EpicTask(name, description, taskStatus, startTime, endTime, duration);
+    }
+
+    @Override
     public List<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }
@@ -177,8 +190,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskByUUID(UUID uuid) {
-        historyManager.add(tasks.get(uuid));
-        return tasks.get(uuid);
+        Task task = tasks.get(uuid);
+        historyManager.add(task);
+        return task;
     }
 
     @Override
@@ -196,9 +210,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addNewTask(Task task) {
         if (isIntervalsIntersection(task)) {
-            System.out.println(
-                    "Время начала задачи пересекается с существующей. Добавление отклонено.");
-            return;
+            throw new TimeIntersectionException("Произошло пересечение по времени");
         }
         tasks.put(task.getUUID(), task);
         prioritizedTasks.add(task);
@@ -219,9 +231,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addNewSubTask(SubTask subtask) {
         if (isIntervalsIntersection(subtask)) {
-            System.out.println(
+            throw new TimeIntersectionException(
                     "Время начала задачи пересекается с существующей. Добавление отклонено.");
-            return;
         }
         subtasks.put(subtask.getUUID(), subtask);
         updateEpicStatus(subtask.getEpicTaskUUID());
@@ -266,18 +277,28 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskByUUID(UUID uuid) {
-        historyManager.remove(uuid);
-        prioritizedTasks.remove(tasks.get(uuid));
-        tasks.remove(uuid);
+        if (tasks.containsKey(uuid)) {
+            historyManager.remove(uuid);
+            prioritizedTasks.remove(tasks.get(uuid));
+            tasks.remove(uuid);
+        } else {
+            throw new NotFoundException(
+                    String.format("Объекта Task с UUID: %s не существует", uuid));
+        }
     }
 
     @Override
     public void deleteSubTaskByUUID(UUID uuid) {
-        UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
-        historyManager.remove(uuid);
-        prioritizedTasks.remove(subtasks.get(uuid));
-        subtasks.remove(uuid);
-        updateEpicStatus(epicTaskUUID);
+        if (subtasks.containsKey(uuid)) {
+            UUID epicTaskUUID = subtasks.get(uuid).getEpicTaskUUID();
+            historyManager.remove(uuid);
+            prioritizedTasks.remove(subtasks.get(uuid));
+            subtasks.remove(uuid);
+            updateEpicStatus(epicTaskUUID);
+        } else {
+            throw new NotFoundException(
+                    String.format("Объекта SubTask с UUID: %s не существует", uuid));
+        }
     }
 
     @Override
